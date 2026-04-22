@@ -1,0 +1,43 @@
+<main class="max-width-content">
+    <section class="create-survey">
+        <img src="assets/img/CeateSurvey/draft.png">
+        <header>
+            <h1>Create new survey</h1>
+            <button class="back-to-home-btn" type="button" routerLink="">Cancel<img
+                    src="assets/img/CeateSurvey/X.png"></button>
+        </header>
+
+        <form [formGroup]="surveyForm" class="formGroup">
+            <section class="survey-details">
+                <div class="title_Section">
+                    <label for="title">Survey name</label>
+                    <div class=""><input id="title" type="text" formControlName="title">
+                        <img class="delete-icon" src="assets/img/CeateSurvey/delete.png">
+                    </div>
+
+                    <label for="end_at">Set end date (optional)</label>
+                    <input id="end_at" type="text" formControlName="end_at">
+                </div>
+                <div class="description_Section">
+                    <label for="description">Description text (optional)</label>
+                    <input id="description" type="text" formControlName="description">
+                </div>
+            </section>
+
+            <!-- QuestionArea -->
+            <section>
+                <div *ngFor="let question of questions; let i = index">
+                    <label for="question">{{i + 1}}. Question</label>
+                    <input id="question" type="text" formControlName="question">
+                </div>
+                <button [disabled]="questions.length >= 4" type="button" (click)="addQuestion()">Add next
+                    question</button>
+            </section>
+        </form>
+        <div class="btnPossition">
+            <button class="publishBtn" type="submit">Publish
+                <img src="assets/img/CeateSurvey/check.png">
+            </button>
+        </div>
+    </section>
+</main>

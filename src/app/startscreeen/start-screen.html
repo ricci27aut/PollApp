@@ -1,0 +1,56 @@
+<main>
+    <header class="max-width-content">
+
+        <aside>
+            <img class="Poll-Logo" src='assets/img/Logo.png' alt="Logo">
+        </aside>
+
+        <aside>
+            <div>
+                <h1>Collect Feedback, Unlock Ideas</h1>
+                <p class="lead-description"><strong>Create and share surveys in minutes – from team events to workplace
+                        culture. Collect
+                        opinions,
+                        engage
+                        your audience, and turn feedback into action.</strong></p>
+                <div class="button-position"><app-start-survey-button-component></app-start-survey-button-component></div>
+            </div>
+
+            <div>
+                <img src="assets/img/Phone.png" alt="Phone">
+            </div>
+
+        </aside>
+
+    </header>
+
+    <section class="max-width-content surveys-section">
+        <h2>Your surveys</h2>
+
+        <section class="survey-group">
+            <h3>Ending soon surveys</h3>
+            <div class="ending-soon-surveys"></div>
+        </section>
+
+        <section class="survey-group">
+
+            <div class="survey-toolbar">
+                <div style="gap: 24px; display: flex;">
+                    <button class="btn-active">Active survey</button>
+                    <button class="btn-past">Past survey</button>
+                </div>
+
+                <select id="category" required>
+                    <option value="" disabled selected hidden>Filter by category</option>
+                    <option value="all">All categories</option>
+                    <option value="active">Active surveys</option>
+                    <option value="past">Past surveys</option>
+                    <option value="popular">Popular surveys</option>
+                </select>
+            </div>
+
+            <div class="active-and-past-surveys"></div>
+        </section>
+    </section>
+
+</main>

@@ -1,1 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
+
+$home-bg: #35273A;
+$primary-color: #FFB770;
+$inactive-color: #FFCFA1;
+$secondary-color: #FEE9D4;
+$braun-btn-primary:#7B5B55;
+
+.max-width-content{
+    max-width: 1920px;
+
+}
+
+@mixin flex-column{
+    display: flex;
+    flex-direction: column;
+}
+
+@mixin flex-start{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+@mixin flex-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+button{
+    cursor: pointer;
+    border: none;
+}
+
