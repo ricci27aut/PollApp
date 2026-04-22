@@ -26,4 +26,8 @@ export class CreateSurveyComponent {
     this.questions.push(1)
     console.log('questions');
   }
+
+  cleanInput(id: string){
+    this.surveyForm.get(id)?.setValue('')
+  }
 }

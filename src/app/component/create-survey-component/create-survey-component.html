@@ -11,16 +11,21 @@
             <section class="survey-details">
                 <div class="title_Section">
                     <label for="title">Survey name</label>
-                    <div class=""><input id="title" type="text" formControlName="title">
-                        <img class="delete-icon" src="assets/img/CeateSurvey/delete.png">
+                    <div class="input-group"><input id="title" type="text" formControlName="title">
+                        <img (click)="cleanInput('title')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
                     </div>
 
                     <label for="end_at">Set end date (optional)</label>
-                    <input id="end_at" type="text" formControlName="end_at">
+                    <div class="input-group"><input id="end_at" type="text" formControlName="end_at">
+                    <img (click)="cleanInput('end_at')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
+                    </div>
                 </div>
                 <div class="description_Section">
                     <label for="description">Description text (optional)</label>
-                    <input id="description" type="text" formControlName="description">
+                    <div class="input-group input-group-description">
+                    <textarea formControlName="description" class="description-input" id="description" type="text"></textarea>
+                    <img (click)="cleanInput('description')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
+                    </div>
                 </div>
             </section>
 
