@@ -33,24 +33,28 @@ header {
 
     >h1 {
         font-size: 56px; // ändern
-        color: $primary-color;
+        color: #EE9236;
     }
+}
 
-    .back-to-home-btn {
-        @include flex-center;
-        gap: 8px;
-        background-color: $braun-btn-primary;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 700;
-        color: white;
-        width: clamp(39px, 12vw, 108px);
-        height: clamp(32px, 12vw, 40px);
+.form-btn-brown {
+    @include flex-center;
+    gap: 8px;
+    background-color: $braun-btn-primary;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    width: clamp(39px, 12vw, 108px);
+    height: clamp(32px, 12vw, 40px);
 
-        &:hover {
-            background-color: #ca9053;
-        }
+    &:hover {
+        background-color: #ca9053;
     }
+}
+
+.add-question-btn {
+    width: 200px;
 }
 
 .formGroup {
@@ -101,12 +105,58 @@ header {
 
         }
     }
-
-
-    padding-bottom: 150px;
 }
 
-.btnPossition {
+.question-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 50%;
+    max-width: 50%;
+}
+
+.questions-section {
+    flex-wrap: wrap;
+    gap: 100px;
+
+    .question-container {
+        flex: 0 0 calc(50% - 50px);
+        max-width: calc(50% - 50px);
+    }
+
+    .quetson-titl {
+        justify-content: space-between !important;
+        padding-bottom: 5px;
+        width: 100%;
+    }
+
+    .answer-container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+
+        >h3 {
+            font-weight: 700;
+            font-style: bold;
+            font-size: 18px;
+        }
+    }
+}
+
+.answer-input-container {
+    width: 100%;
+
+    .answer-input {
+        @include flex-center;
+        padding-bottom: 10px;
+
+        >input {
+            margin: 0 8px;
+        }
+    }
+}
+
+.btn-Supmit {
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -140,18 +190,72 @@ header {
 .input-group {
     @include flex-start;
     gap: 15px;
+}
 
-    >.delete-icon {
-        width: 26px;
-        cursor: pointer;
-        content: url('/assets/img/CeateSurvey/delete.png');
+.delete-icon {
+    width: 26px;
+    cursor: pointer;
+    content: url('/assets/img/CeateSurvey/delete.png');
 
-        &:hover {
-            content: url('/assets/img/CeateSurvey/delete.hover.png');
-        }
+    &:hover {
+        content: url('/assets/img/CeateSurvey/delete.hover.png');
     }
 }
 
 .input-group-description {
     align-items: flex-start;
+}
+
+.padding-top-10px {
+    padding-top: 10px;
+}
+
+.possition-checkboxs {
+    padding-top: 30px;
+    padding-bottom: 15px;
+    justify-content: space-between;
+    align-items: center;
+
+    .checkbox {
+        font-size: 12px;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        >.input-checkbox {
+            margin-right: 5px;
+            width: 15px;
+
+            &:hover {
+                cursor: pointer;
+                content: url('/assets/img/CeateSurvey/checkboxs_hover.png');
+            }
+        }
+
+    }
+}
+
+.add-answer-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    color: white;
+    font-size: 16px;
+
+    background-color: transparent;
+    border-bottom: 2px solid white;
+    padding: 15px 0 6px 0;
+    margin-left: 6%;
+}
+
+@media (max-width: 900px) {
+
+    //später überarbeiten
+    .questions-section .question-container {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
 }

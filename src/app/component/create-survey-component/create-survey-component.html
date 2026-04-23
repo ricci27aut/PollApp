@@ -3,7 +3,7 @@
         <img src="assets/img/CeateSurvey/draft.png">
         <header>
             <h1>Create new survey</h1>
-            <button class="back-to-home-btn" type="button" routerLink="">Cancel<img
+            <button class="form-btn-brown" type="button" routerLink="">Cancel<img
                     src="assets/img/CeateSurvey/X.png"></button>
         </header>
 
@@ -15,33 +15,53 @@
                         <img (click)="cleanInput('title')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
                     </div>
 
-                    <label for="end_at">Set end date (optional)</label>
+                    <label class="padding-top-10px" for="end_at">Set end date (optional)</label>
                     <div class="input-group"><input id="end_at" type="text" formControlName="end_at">
-                    <img (click)="cleanInput('end_at')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
+                        <img (click)="cleanInput('end_at')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
                     </div>
                 </div>
                 <div class="description_Section">
                     <label for="description">Description text (optional)</label>
                     <div class="input-group input-group-description">
-                    <textarea formControlName="description" class="description-input" id="description" type="text"></textarea>
-                    <img (click)="cleanInput('description')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
+                        <textarea formControlName="description" class="description-input" id="description"
+                            type="text"></textarea>
+                        <img (click)="cleanInput('description')" class="delete-icon"
+                            src="assets/img/CeateSurvey/delete.png">
                     </div>
                 </div>
             </section>
 
-            <!-- QuestionArea -->
-            <section>
-                <div *ngFor="let question of questions; let i = index">
-                    <label for="question">{{i + 1}}. Question</label>
+            <section class="survey-details questions-section">
+
+
+
+                <div class="question-container" *ngFor="let question of questions; let i = index">
+                    <div class="input-group quetson-titl">
+                        <label for="question">{{i + 1}}. Question</label>
+                        <img class="delete-icon" src="assets/img/CeateSurvey/delete.png">
+                    </div>
                     <input id="question" type="text" formControlName="question">
+
+                    <div class="answer-container possition-checkboxs"><h3>Answers</h3><p class="checkbox"><img class="input-checkbox" src="assets/img/CeateSurvey/checkboxs.png">Allow multiple answers.</p></div>
+                    <div class="answer-input-container" *ngFor="let answers of answer; let y = index">
+                        <p class="answer-input">{{ letters[y] }}<input id="answer{{y + 1}}" type="text" formControlName="answer"><img class="delete-icon" src="assets/img/CeateSurvey/delete.png"></p>
+                    </div>       
+                    <button class="add-answer-btn" [disabled]="answer.length >= 4"  (click)="addAnswers()">Add answer<img src="assets/img/CeateSurvey/add_circle_with.png"></button>
                 </div>
-                <button [disabled]="questions.length >= 4" type="button" (click)="addQuestion()">Add next
-                    question</button>
+
+
+
+
+                <div class="question-container">
+                    <button class="form-btn-brown add-question-btn" [disabled]="questions.length >= 4" type="button" (click)="addQuestion()">Add next
+                        question<img src="assets/img/CeateSurvey/add_circle_with.png"></button>
+                </div>
+
             </section>
         </form>
-        <div class="btnPossition">
-            <button class="publishBtn" type="submit">Publish
-                <img src="assets/img/CeateSurvey/check.png">
+        <div class="btn-Supmit">
+            <button type="submit" class="publishBtn" type="submit">Publish
+                <img src="assets/img/CeateSurvey/check-btn.png">
             </button>
         </div>
     </section>
