@@ -1,0 +1,10 @@
+<article class="drop-down">
+    <div class="drop-down-label" [class.is-hover]="isHover" (click)="openDropDown()">
+        <h3>Sort by categories<img class="padding-left-10px" [src]="iconPath"></h3>
+    </div>
+
+    <div class="categories-container" [class.dnone]="isClosed">
+        <p class="userFeedback" [class.dnone]="isSelected || !isClosed">{{categories[whichChoice]}}</p>
+        <p *ngFor="let categorie of categories, let i = index" (click)="showChoice(i)">{{categories[i]}}</p>
+    </div>
+</article>

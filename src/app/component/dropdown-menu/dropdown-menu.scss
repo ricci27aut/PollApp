@@ -1,0 +1,77 @@
+@use '../../../styles.scss' as *;
+
+
+.drop-down {
+    max-width: fit-content;
+    position: relative;
+
+    .drop-down-label {
+        width: fit-content;
+        padding: 5px 8px 5px 8px;
+        margin-bottom: 3px;
+        border-radius: 8px;
+        transition: background-color 0.2s ease;
+
+        &:hover,
+        &.is-hover {
+            cursor: pointer;
+            background-color: #493C4D;
+        }
+
+        >h3 {
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            font-style: bold;
+        }
+    }
+
+    .categories-container {
+        position: absolute;
+        top: 110%;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        border-radius: 8px;
+        padding: 5px 0 5px 5px;
+        background-color: white !important;
+        min-width: fit-content;
+        max-width: 100%;
+
+        display: flex;
+        flex-direction: column;
+        row-gap: 3px;
+
+        >p {
+            padding: 3px;
+            margin-block-start: 0em;
+            margin-block-end: 0em;
+            color: #35273A;
+            font-size: 14px !important;
+
+            &:hover {
+                width: fit-content;
+                border-radius: 6px;
+                max-width: content;
+                background-color: #F4E9FB;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.padding-left-10px {
+    padding-left: 10px;
+}
+
+.dnone,
+.isClosed {
+    display: none !important;
+}
+
+.userFeedback {
+    top: 0;
+    color: $primary-color;
+    padding-left: 8px;
+    font-size: 14px;
+}
