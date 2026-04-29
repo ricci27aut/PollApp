@@ -1,5 +1,6 @@
-import { Component,  } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SurveyService } from '../../shared/services/survey-service'
 
 @Component({
   selector: 'app-dropdown-menu',
@@ -8,6 +9,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './dropdown-menu.scss',
 })
 export class DropdownMenu {
+
+  surveyService = inject(SurveyService)
 
   categories= [ 'Team Activities','Health & Wellness','Gaming & Entertainment','Education & Learning','Lifestyle & Preferences','Technology & Innovation',]
   iconPath = 'assets/img/dropDown/arrow_drop_down.png'

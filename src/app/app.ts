@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { SurveyService } from '../app/shared/services/survey-service';
+
 
 @Component({
   selector: 'app-root',
@@ -9,4 +11,10 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('PollApp');
+
+  dbServer = inject(SurveyService);
+
+  async ngOnInit(){
+    await this.dbServer.getSurvey();
+  }
 }

@@ -1,16 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { FormBuilder, ReactiveFormsModule, Validators,FormsModule,FormArray } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators, FormsModule, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { DropdownMenu } from '../dropdown-menu/dropdown-menu'
+import { SurveyService } from '../../shared/services/survey-service'
 
 @Component({
   selector: 'app-create-survey-component',
-  imports: [RouterLink, ReactiveFormsModule, CommonModule, FormsModule],
+  imports: [RouterLink, ReactiveFormsModule, CommonModule, FormsModule, DropdownMenu],
   templateUrl: './create-survey-component.html',
   styleUrl: './create-survey-component.scss',
 })
 export class CreateSurveyComponent {
   private fb = inject(FormBuilder);
+  surveyService = inject(SurveyService)
 
   letters = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.'];
 
@@ -18,6 +21,10 @@ export class CreateSurveyComponent {
     title: ['', Validators.required],
     description: [''],
     end_at: [''],
+    category: ['']
+  });
+
+  questionsForm = this.fb.group({
     questions: this.fb.array([
       this.createQuestion()
     ])
@@ -25,17 +32,17 @@ export class CreateSurveyComponent {
 
   createQuestion() {
     return this.fb.group({
-      question: [''],
+      question: ['', Validators.required],
       allowMultiple: [false],
       answers: this.fb.array([
-        this.fb.control(''),
-        this.fb.control('')
+        this.fb.control('', Validators.required),
+        this.fb.control('', Validators.required)
       ])
     });
   }
 
   get questions() {
-    return this.surveyForm.get('questions') as FormArray;
+    return this.questionsForm.get('questions') as FormArray;
   }
 
   answers(i: number) {
@@ -78,16 +85,42 @@ export class CreateSurveyComponent {
   }
 
   publishSurvey() {
+    if (this.surveyForm.invalid) {
+      /* this.surveyForm.markAllAsTouched(); */
+      return;
+    }
+
+    if (this.questionsForm.invalid) {
+      /*  this.questionsForm.markAllAsTouched(); */
+      return;
+    }
+
     console.log(this.surveyForm.value);
-    this.userFeedBack();
-    this.clearForm();
+    console.log(this.questionsForm.value);
+    this.checkFormValue()
   }
 
-  userFeedBack(){
+  checkFormValue() {
+    let formData = {
+      title: this.surveyForm.controls.title.value || '',
+      description: this.surveyForm.controls.description.value || '',
+      ends_at: this.surveyForm.controls.end_at.value || null,
+      category: this.surveyForm.controls.category.value || 'Team Activities',
+    };
+
+    this.surveyService.addSurvey(formData)
+  }
+
+  AlowMultiAnswers(i: number) {
+    const control = this.questions.at(i).get('allowMultiple');
+    control?.setValue(!control.value);
+  }
+
+  userFeedBack() {
 
   }
 
-  clearForm(){
+  clearForm() {
 
   }
 }

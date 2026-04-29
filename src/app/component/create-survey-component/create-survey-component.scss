@@ -3,12 +3,12 @@
 main {
     @include flex-center;
     color: white;
-    height: 100vh;
+    min-height: 100vh;
 
     input {
         border-radius: 4px;
         border-top-right-radius: 16px;
-        height: 35px;
+        height: 30px;
         width: 100%;
         padding-left: 5px;
 
@@ -23,8 +23,9 @@ main {
     border-top-right-radius: 100px;
     background-color: $home-bg;
     width: 85%;
-    min-height: 80vh;
+    min-height: 60vh;
     padding: 40px;
+    margin: 20px 0 20px 0;
 }
 
 header {
@@ -69,8 +70,7 @@ header {
 .survey-details {
     display: flex;
     justify-content: space-between;
-    padding: 30px;
-    padding-top: 50px;
+    padding: 30px 30px 0px 30px;
     width: 100%;
     gap: 100px;
 
@@ -116,8 +116,9 @@ header {
 }
 
 .questions-section {
+    padding-bottom: 10px;
     flex-wrap: wrap;
-    gap: 100px;
+    gap: 50px;
 
     .question-container {
         flex: 0 0 calc(50% - 50px);
@@ -210,6 +211,10 @@ header {
     padding-top: 10px;
 }
 
+.padding-bottom-5px {
+    padding-bottom: 5px;
+}
+
 .possition-checkboxs {
     padding-top: 30px;
     padding-bottom: 15px;
@@ -226,9 +231,9 @@ header {
         >.input-checkbox {
             margin-right: 5px;
             width: 15px;
+            cursor: pointer;
 
-            &:hover {
-                cursor: pointer;
+            &:hover:not(.no-hover) {
                 content: url('/assets/img/CeateSurvey/checkboxs_hover.png');
             }
         }
@@ -249,6 +254,13 @@ header {
     border-bottom: 2px solid white;
     padding: 15px 0 6px 0;
     margin-left: 6%;
+}
+
+.possition-dropdown {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
 }
 
 @media (max-width: 900px) {

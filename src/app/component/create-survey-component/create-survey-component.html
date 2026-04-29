@@ -10,18 +10,21 @@
         <form [formGroup]="surveyForm" class="formGroup">
             <section class="survey-details">
                 <div class="title_Section">
-                    <label for="title">Survey name</label>
+                    <label class="padding-bottom-5px" for="title">Survey name</label>
                     <div class="input-group"><input id="title" type="text" formControlName="title">
                         <img (click)="cleanInput('title')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
                     </div>
 
-                    <label class="padding-top-10px" for="end_at">Set end date (optional)</label>
-                    <div class="input-group"><input id="end_at" type="text" formControlName="end_at">
+                    <label class="padding-top-10px padding-bottom-5px" for="end_at">Set end date (optional)</label>
+                    <div class="input-group"><input style="width: 70%;" id="end_at" type="text" formControlName="end_at">
                         <img (click)="cleanInput('end_at')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
+                        <div class="possition-dropdown">
+                            <app-dropdown-menu></app-dropdown-menu>
+                        </div>
                     </div>
                 </div>
                 <div class="description_Section">
-                    <label for="description">Description text (optional)</label>
+                    <label class="padding-bottom-5px" for="description">Description text (optional)</label>
                     <div class="input-group input-group-description">
                         <textarea formControlName="description" class="description-input" id="description"
                             type="text"></textarea>
@@ -30,41 +33,49 @@
                     </div>
                 </div>
             </section>
+            <form [formGroup]="questionsForm">
+                <section class="survey-details questions-section" formArrayName="questions">
 
-            <section class="survey-details questions-section" formArrayName="questions">
+                    <div class="question-container" *ngFor="let question of questions.controls; let i = index"
+                        [formGroupName]="i">
+                        <div class="input-group quetson-titl">
+                            <label for="question">{{i + 1}}. Question</label>
+                            <img (click)="deleteQuestion(i)" class="delete-icon"
+                                src="assets/img/CeateSurvey/delete.png">
+                        </div>
+                        <input [id]="'question-' + i" type="text" formControlName="question">
 
-                <div class="question-container" *ngFor="let question of questions.controls; let i = index" [formGroupName]="i">
-                    <div class="input-group quetson-titl">
-                        <label for="question">{{i + 1}}. Question</label>
-                        <img (click)="deleteQuestion(i)" class="delete-icon"
-                            src="assets/img/CeateSurvey/delete.png">
+                        <div class="answer-container possition-checkboxs">
+                            <h3>Answers</h3>
+                            <p class="checkbox"><img (click)="AlowMultiAnswers(i)" class="input-checkbox"
+                                    [class.no-hover]="questions.at(i).get('allowMultiple')?.value" [src]="questions.at(i).get('allowMultiple')?.value
+                                ? 'assets/img/CeateSurvey/checkbox_fokus.png'
+                                : 'assets/img/CeateSurvey/checkboxs.png'">
+                                Allow multiple answers.</p>
+                        </div>
+                        <div formArrayName="answers" style="width: 100%;">
+                            <div class="answer-input-container"
+                                *ngFor="let answer of answers(i).controls; let y = index">
+                                <p class=" answer-input">{{letters[y]}}
+                                    <input [id]="'answer-' + i + '-' + y" type="text" [formControlName]="y">
+                                    <img (click)="deleteAnswer(i, y)" class="delete-icon"
+                                        src="assets/img/CeateSurvey/delete.png">
+                                </p>
+                            </div>
+                        </div>
+                        <button type="button" class="add-answer-btn" [disabled]="answers(i).length >= 6"
+                            (click)="addAnswer(i)">Add answer
+                            <img src="assets/img/CeateSurvey/add_circle_with.png"></button>
                     </div>
-                    <input [id]="'question-' + i" type="text" formControlName="question">
-
-                    <div class="answer-container possition-checkboxs">
-                        <h3>Answers</h3>
-                        <p class="checkbox"><img class="input-checkbox" src="assets/img/CeateSurvey/checkboxs.png">Allow
-                            multiple answers.</p>
+                    <div class="question-container">
+                        <button class="form-btn-brown add-question-btn" [disabled]="questions.length >= 4" type="button"
+                            (click)="addQuestion()">Add next
+                            question<img src="assets/img/CeateSurvey/add_circle_with.png"></button>
                     </div>
-                    <div formArrayName="answers" style="width: 100%;">
-                    <div class="answer-input-container" *ngFor="let answer of answers(i).controls; let y = index">
-                        <p class=" answer-input">{{letters[y]}}
-                        <input [id]="'answer-' + i + '-' + y" type="text" [formControlName]="y">
-                        <img (click)="deleteAnswer(i, y)" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
-                        </p>
-                    </div>
-                    </div>
-                    <button type="button" class="add-answer-btn" [disabled]="answers(i).length >= 6"
-                        (click)="addAnswer(i)">Add answer
-                        <img src="assets/img/CeateSurvey/add_circle_with.png"></button>
-                </div>
-                <div class="question-container">
-                    <button class="form-btn-brown add-question-btn" [disabled]="questions.length >= 4" type="button"
-                        (click)="addQuestion()">Add next
-                        question<img src="assets/img/CeateSurvey/add_circle_with.png"></button>
-                </div>
-            </section>
+                </section>
+            </form>
         </form>
+
         <div class="btn-Supmit">
             <button (click)="publishSurvey()" type="submit" class="publishBtn" type="submit">Publish
                 <img src="assets/img/CeateSurvey/check-btn.png">

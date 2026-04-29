@@ -70,8 +70,8 @@
 }
 
 .userFeedback {
-    top: 0;
-    color: $primary-color;
-    padding-left: 8px;
-    font-size: 14px;
+    position: absolute;
+    top: 110%;
+    color: $primary-color !important;
+    padding-left: 8px !important;
 }
