@@ -84,7 +84,7 @@ export class CreateSurveyComponent {
     this.surveyForm.get(input)?.setValue('');
   }
 
-  publishSurvey() {
+  checkFormValue() {
     if (this.surveyForm.invalid) {
       /* this.surveyForm.markAllAsTouched(); */
       return;
@@ -94,13 +94,10 @@ export class CreateSurveyComponent {
       /*  this.questionsForm.markAllAsTouched(); */
       return;
     }
-
-    console.log(this.surveyForm.value);
-    console.log(this.questionsForm.value);
-    this.checkFormValue()
+    this.publishSurvey()
   }
 
-  checkFormValue() {
+  async publishSurvey() {
     let formData = {
       title: this.surveyForm.controls.title.value || '',
       description: this.surveyForm.controls.description.value || '',
@@ -108,8 +105,27 @@ export class CreateSurveyComponent {
       category: this.surveyForm.controls.category.value || 'Team Activities',
     };
 
-    this.surveyService.addSurvey(formData)
+    const newSurvey = await this.surveyService.addSurvey(formData);
+    if (!newSurvey) return;
+    const surveyId = newSurvey.id;
+
+    this.publshQuestions(surveyId)
   }
+
+  publshQuestions(id: number) {
+    const questionsData = this.questionsForm.controls.questions.value.map((question: any) => {
+      return {
+        survey_id: id,
+        question: question.question,
+        answers: question.answers
+      };
+    });
+
+    this.surveyService.addSurveyQuestons(questionsData)
+  }
+
+
+
 
   AlowMultiAnswers(i: number) {
     const control = this.questions.at(i).get('allowMultiple');

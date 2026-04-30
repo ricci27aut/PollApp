@@ -17,19 +17,49 @@ export class SurveyService {
   async getSurvey() {
     let { data: survey, error } = await this.sbSurvey
       .from('survey_list')
-      .select('title, description, ends_at, category')// filter only name and count
-
-    /*  .like('name', 'Bildschirm')// sucht nach genau dem begriff Bildschierm berücksichtigt auch klein und großschreibung */
-    /* .ilike('name', 'bildschirm')// sucht nach genau dem begriff Bildschierm berücksichtigt auch klein und großschreibung */
+      .select('id, title, description, ends_at, category')
     if (!survey) return;
-    console.log(survey);
-
 
     this.surveys = survey ?? [];
     this.getEndingSurveys()
     this.getCategorySurveys('Team Activities')
     /* his.serverEventListener() */
   }
+
+  async getSurveyQuestions(surveyId: number) {
+  return await this.sbSurvey
+    .from('questions')
+    .select('*')
+    .eq('survey_id', surveyId);
+}
+
+  async addSurvey(survey: { title: string, description: string, ends_at?: string | null, category: string }) {
+    const { data, error } = await this.sbSurvey
+      .from('survey_list')
+      .insert([survey])
+      .select()
+      .single();
+    return data;
+  }
+
+  async addSurveyQuestons(questionsData: {
+    survey_id: number,
+    question: string,
+    answers: string[]
+  }[]) {
+    const { data, error } = await this.sbSurvey
+      .from('questions')
+      .insert(questionsData)
+      .select()
+  }
+
+
+
+
+
+
+
+
 
   getEndingSurveys() {
     const sortedSurveys = this.surveys
@@ -40,7 +70,6 @@ export class SurveyService {
       .slice(0, 3);
 
     this.endingSurveys.set(sortedSurveys);
-    console.log(this.endingSurveys);
   }
 
   getCategorySurveys(category: string) {
@@ -49,16 +78,40 @@ export class SurveyService {
     );
 
     this.categorySurveys.set(filteredSurveys);
-    console.log(this.categorySurveys());
   }
 
-  async addSurvey(survey: { title: string, description: string, ends_at?: string | null, category: string }) {
-    const { data, error } = await this.sbSurvey
-      .from('survey_list')
-      .insert([survey])
-      .select()
-    console.log(data, error);
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

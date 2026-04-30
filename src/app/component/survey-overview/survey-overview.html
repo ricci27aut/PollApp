@@ -1,4 +1,4 @@
-<article *ngFor="let survey of surveyService.categorySurveys(); let i = index">
+<article (click)="showSurveyVoting(survey.title,survey.id)" *ngFor="let survey of surveyService.categorySurveys(); let i = index">
   <h3>{{ survey.category }}</h3>
   <h1>{{ survey.title }}</h1>
   <p>{{ showLeftDays(survey.ends_at) }}</p>

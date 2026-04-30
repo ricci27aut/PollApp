@@ -1,0 +1,87 @@
+@use '../../../styles.scss' as *;
+
+.formParticipation {
+    width: 65%;
+    height: 80vh;
+    padding: 40px;
+    background-color: #F3EFF5;
+    border-top-right-radius: 120px;
+    color: black;
+
+    header {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        .survey-meta {
+            .published-icon {
+                width: 85px;
+                height: 26px;
+                margin-bottom: 5px;
+            }
+
+            .survey-meta__info {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                font-weight: 500;
+                font-size: 14px;
+            }
+        }
+
+        h1 {
+            color: $primary-color;
+            font-weight: 400;
+            font-size: 56px;
+        }
+
+        h3 {
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+    }
+
+    section {
+        margin-top: 30px;
+        display: grid;
+        align-items: start;
+        justify-content: start;
+        grid-template-columns: repeat(2, 50%);
+
+        .queston-area {
+            margin-bottom: 20px;
+
+            h2 {
+                font-size: 18px;
+                font-weight: 700;
+                font-style: bold;
+            }
+
+            .userFeedback {
+                font-size: 14px;
+                font-weight: 400;
+                margin-left: 20px;
+            }
+
+            .answer-option {
+                margin-top: 20px;
+                margin-left: 20px;
+                display: flex;
+                flex-direction: column;
+                row-gap: 7px;
+
+                .check-icon {
+                    width: 15px;
+                    cursor: pointer;
+                }
+
+                div {
+                    @include flex-start;
+                    gap: 20px
+                }
+            }
+        }
+    }
+}

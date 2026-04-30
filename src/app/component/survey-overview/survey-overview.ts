@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { SurveyService } from '../../shared/services/survey-service'
 import { CommonModule } from '@angular/common'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-survey-overview',
@@ -9,6 +10,8 @@ import { CommonModule } from '@angular/common'
   styleUrl: './survey-overview.scss',
 })
 export class SurveyOverview {
+  constructor(private router: Router) { }
+
   surveyService = inject(SurveyService);
 
   showLeftDays(endDate: number) {
@@ -23,6 +26,9 @@ export class SurveyOverview {
     } else {
       return `Ends in ${differenceInDays} Days`;
     }
+  }
 
+  showSurveyVoting(title: string, id: number) {
+    this.router.navigate([id, title, 'voting']);
   }
 }

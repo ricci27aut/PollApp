@@ -1,0 +1,27 @@
+
+    <form class="formParticipation">
+        <header>
+            <div class="survey-meta">
+                <img class="published-icon" src="assets/img/CeateSurvey/published.png">
+                <div class="survey-meta__info">
+                    <p>Ends on {{surveyInfo()[0].ends_at}}</p>
+                    <p>Category:{{ surveyInfo()[0].category }}</p>
+                </div>
+            </div>
+            <h1>{{ surveyInfo()[0].title }}</h1>
+            <h3>{{ surveyInfo()[0].description }}</h3>
+        </header>
+        <section>
+            <div class="queston-area" *ngFor="let question of surveyQuestons(),let i = index">
+                <h2>{{ i + 1 }}. {{ question.question }}</h2>
+                <p class="userFeedback">More than one answers are possible.</p>
+
+                <div class="answer-option"  *ngFor="let answer of question.answers; let i = index">
+                    <div>
+                        <img class="check-icon" src='assets/img/CeateSurvey/checkboxs.png'>
+                        <p>{{letters[i]}}<span>{{answer}}</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
