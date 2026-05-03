@@ -1,0 +1,10 @@
+<section>
+    <div>
+        <h1>Survey results Live</h1>
+    </div>
+    <div *ngFor="let result of questions, let i = index">
+        <h2>{{i + 1}}.{{result.question}}</h2>
+        <div><p>{{letters[i]}}</p><div class=""></div><p></p></div>
+    </div>
+
+</section>

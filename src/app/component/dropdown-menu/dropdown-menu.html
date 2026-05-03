@@ -1,6 +1,6 @@
 <article class="drop-down">
     <div class="drop-down-label" [class.is-hover]="isHover" (click)="openDropDown()">
-        <h3>Sort by categories<img class="padding-left-10px" [src]="iconPath"></h3>
+        <h3>{{ headline }}<img class="padding-left-10px" [src]="iconPath"></h3>
     </div>
     
     <p class="userFeedback" [class.dnone]="isSelected || !isClosed">{{categories[whichChoice]}}</p>

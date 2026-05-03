@@ -10,4 +10,7 @@ import { SurveyOverview } from '../component/survey-overview/survey-overview';
   templateUrl: './start-screen.html',
   styleUrl: './start-screen.scss',
 })
-export class StartScreen {}
+export class StartScreen {
+
+  showPastSurveys = false;
+}

@@ -12,6 +12,7 @@ export class SurveyService {
   surveys: any[] = [];
   endingSurveys = signal<any[]>([]);
   categorySurveys = signal<any[]>([])
+  pastSurveys = signal<any[]>([])
 
 
   async getSurvey() {
@@ -27,11 +28,11 @@ export class SurveyService {
   }
 
   async getSurveyQuestions(surveyId: number) {
-  return await this.sbSurvey
-    .from('questions')
-    .select('*')
-    .eq('survey_id', surveyId);
-}
+    return await this.sbSurvey
+      .from('questions')
+      .select('*')
+      .eq('survey_id', surveyId);
+  }
 
   async addSurvey(survey: { title: string, description: string, ends_at?: string | null, category: string }) {
     const { data, error } = await this.sbSurvey
@@ -53,23 +54,26 @@ export class SurveyService {
       .select()
   }
 
-
-
-
-
-
-
-
-
   getEndingSurveys() {
-    const sortedSurveys = this.surveys
+    const now = new Date().getTime();
+
+    const activeSurveys = this.surveys
       .filter(survey => survey.ends_at)
+      .filter(survey => new Date(survey.ends_at).getTime() >= now)
       .sort((a, b) =>
         new Date(a.ends_at).getTime() - new Date(b.ends_at).getTime()
       )
       .slice(0, 3);
 
-    this.endingSurveys.set(sortedSurveys);
+    const expiredSurveys = this.surveys
+      .filter(survey => survey.ends_at)
+      .filter(survey => new Date(survey.ends_at).getTime() < now)
+      .sort((a, b) =>
+        new Date(b.ends_at).getTime() - new Date(a.ends_at).getTime()
+      );
+
+    this.endingSurveys.set(activeSurveys);
+    this.pastSurveys.set(expiredSurveys);
   }
 
   getCategorySurveys(category: string) {

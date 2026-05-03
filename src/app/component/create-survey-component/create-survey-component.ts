@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators, FormsModule, FormArray } 
 import { CommonModule } from '@angular/common';
 import { DropdownMenu } from '../dropdown-menu/dropdown-menu'
 import { SurveyService } from '../../shared/services/survey-service'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-survey-component',
@@ -14,8 +15,11 @@ import { SurveyService } from '../../shared/services/survey-service'
 export class CreateSurveyComponent {
   private fb = inject(FormBuilder);
   surveyService = inject(SurveyService)
+  router = inject(Router)
 
   letters = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.'];
+  publishedIconPath = 'assets/img/CeateSurvey/draft.png';
+  showUserFeedack = false
 
   surveyForm = this.fb.group({
     title: ['', Validators.required],
@@ -48,7 +52,6 @@ export class CreateSurveyComponent {
   answers(i: number) {
     return this.questions.at(i).get('answers') as FormArray;
   }
-
 
   addQuestion() {
     if (this.questions.length >= 4) return;
@@ -85,23 +88,19 @@ export class CreateSurveyComponent {
   }
 
   checkFormValue() {
-    if (this.surveyForm.invalid) {
-      /* this.surveyForm.markAllAsTouched(); */
-      return;
-    }
-
-    if (this.questionsForm.invalid) {
-      /*  this.questionsForm.markAllAsTouched(); */
-      return;
-    }
+    if (this.surveyForm.invalid || this.questionsForm.invalid) {return};
     this.publishSurvey()
+  }
+
+  handleSurveyChange(type: string) {
+  this.surveyForm.controls.category.setValue(type);
   }
 
   async publishSurvey() {
     let formData = {
       title: this.surveyForm.controls.title.value || '',
       description: this.surveyForm.controls.description.value || '',
-      ends_at: this.surveyForm.controls.end_at.value || null,
+      ends_at: this.surveyForm.controls.end_at.value || new Date().toISOString(),
       category: this.surveyForm.controls.category.value || 'Team Activities',
     };
 
@@ -109,7 +108,7 @@ export class CreateSurveyComponent {
     if (!newSurvey) return;
     const surveyId = newSurvey.id;
 
-    this.publshQuestions(surveyId)
+    this.publshQuestions(surveyId);
   }
 
   publshQuestions(id: number) {
@@ -122,10 +121,8 @@ export class CreateSurveyComponent {
     });
 
     this.surveyService.addSurveyQuestons(questionsData)
+    this.userFeedBack();
   }
-
-
-
 
   AlowMultiAnswers(i: number) {
     const control = this.questions.at(i).get('allowMultiple');
@@ -133,11 +130,12 @@ export class CreateSurveyComponent {
   }
 
   userFeedBack() {
-
+    this.publishedIconPath = 'assets/img/CeateSurvey/published.png'
+    this.showUserFeedack= true;
   }
 
-  clearForm() {
-
+  clearForm(){
+    this.router.navigate(['/']);;
   }
 }
 

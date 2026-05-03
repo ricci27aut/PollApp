@@ -35,14 +35,14 @@
 
             <div class="survey-toolbar">
                 <div style="gap: 24px; display: flex;">
-                    <button class="btn-active">Active survey</button>
-                    <button class="btn-past">Past survey</button>
+                    <button class="btn-active" (click)="showPastSurveys = false">Active survey</button>
+                    <button class="btn-past" (click)="showPastSurveys = true">Past survey</button>
                 </div>
             <div>
-              <app-dropdown-menu></app-dropdown-menu>
+              <app-dropdown-menu headline="Sort by category"></app-dropdown-menu>
             </div>
             </div>
-            <div class="active-and-past-surveys"><app-survey-overview class=" category-style"></app-survey-overview></div>
+            <div class="active-and-past-surveys"><app-survey-overview class="category-style" [showPastSurveys]="showPastSurveys"></app-survey-overview></div>
         </section>
     </section>
 

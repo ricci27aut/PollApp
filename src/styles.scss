@@ -6,9 +6,12 @@ $inactive-color: #FFCFA1;
 $secondary-color: #FEE9D4;
 $braun-btn-primary:#7B5B55;
 
+/* body{
+    background-color: $home-bg; // vl für später
+} */
+
 .max-width-content{
     max-width: 1440px;
-
 }
 
 @mixin flex-column{

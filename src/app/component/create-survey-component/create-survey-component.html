@@ -1,6 +1,6 @@
 <main class="max-width-content">
     <section class="create-survey">
-        <img src="assets/img/CeateSurvey/draft.png">
+        <img [src]="publishedIconPath">
         <header>
             <h1>Create new survey</h1>
             <button class="form-btn-brown" type="button" routerLink="">Cancel<img
@@ -11,15 +11,18 @@
             <section class="survey-details">
                 <div class="title_Section">
                     <label class="padding-bottom-5px" for="title">Survey name</label>
-                    <div class="input-group"><input id="title" type="text" formControlName="title">
+                    <div class="input-group"><input id="title" type="text" formControlName="title"
+                            [class.invalid]="surveyForm.get('title')?.invalid && surveyForm.get('title')?.touched">
                         <img (click)="cleanInput('title')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
                     </div>
 
                     <label class="padding-top-10px padding-bottom-5px" for="end_at">Set end date (optional)</label>
-                    <div class="input-group"><input style="width: 70%;" id="end_at" type="text" formControlName="end_at">
+                    <div class="input-group"><input style="width: 70%;" id="end_at" type="text"
+                            formControlName="end_at">
                         <img (click)="cleanInput('end_at')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
                         <div class="possition-dropdown">
-                            <app-dropdown-menu></app-dropdown-menu>
+                            <app-dropdown-menu headline="Choose category"
+                                (surveySelected)="handleSurveyChange($event)"></app-dropdown-menu>
                         </div>
                     </div>
                 </div>
@@ -39,11 +42,12 @@
                     <div class="question-container" *ngFor="let question of questions.controls; let i = index"
                         [formGroupName]="i">
                         <div class="input-group quetson-titl">
-                            <label for="question">{{i + 1}}. Question</label>
+                            <label for="question-{{i}}">{{i + 1}}. Question</label>
                             <img (click)="deleteQuestion(i)" class="delete-icon"
                                 src="assets/img/CeateSurvey/delete.png">
                         </div>
-                        <input [id]="'question-' + i" type="text" formControlName="question">
+                        <input [id]="'question-' + i" type="text" formControlName="question"
+                            [class.invalid]="questions.at(i).get('question')?.invalid && questions.at(i).get('question')?.touched">
 
                         <div class="answer-container possition-checkboxs">
                             <h3>Answers</h3>
@@ -57,7 +61,8 @@
                             <div class="answer-input-container"
                                 *ngFor="let answer of answers(i).controls; let y = index">
                                 <p class=" answer-input">{{letters[y]}}
-                                    <input [id]="'answer-' + i + '-' + y" type="text" [formControlName]="y">
+                                    <input [id]="'answer-' + i + '-' + y" type="text" [formControlName]="y"
+                                        [class.invalid]="questions.at(i).get('question')?.invalid && questions.at(i).get('question')?.touched">
                                     <img (click)="deleteAnswer(i, y)" class="delete-icon"
                                         src="assets/img/CeateSurvey/delete.png">
                                 </p>
@@ -75,11 +80,16 @@
                 </section>
             </form>
         </form>
-
         <div class="btn-Supmit">
-            <button (click)="checkFormValue()" type="submit" class="publishBtn" type="submit">Publish
+            <button (click)="checkFormValue()" type="submit" class="publishBtn" type="submit" [disabled]="!questionsForm.valid">Publish
                 <img src="assets/img/CeateSurvey/check-btn.png">
             </button>
         </div>
     </section>
+    <article class="userFeedBack" [class.dnone]="!showUserFeedack">
+        <div class="userMessage">
+            <i>Your survey is now published</i>
+            <img (click)="clearForm()" src="assets/img/CeateSurvey/X.png">
+        </div>
+    </article>
 </main>

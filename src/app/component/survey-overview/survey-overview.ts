@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { SurveyService } from '../../shared/services/survey-service'
 import { CommonModule } from '@angular/common'
 import { Router } from '@angular/router';
@@ -13,6 +13,14 @@ export class SurveyOverview {
   constructor(private router: Router) { }
 
   surveyService = inject(SurveyService);
+  selectedArray: string = 'survey'
+  @Input() showPastSurveys: boolean = false;
+
+  get displayedSurveys() {
+    return this.showPastSurveys
+      ? this.surveyService.pastSurveys()
+      : this.surveyService.categorySurveys();
+  }
 
   showLeftDays(endDate: number) {
     const today = new Date();

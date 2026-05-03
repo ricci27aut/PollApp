@@ -263,6 +263,44 @@ header {
     justify-content: end;
 }
 
+input.invalid {
+    border: 2px solid red;
+}
+
+.userFeedBack {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.141);
+    position: absolute;
+        left: 0;
+        top: 0;
+    .userMessage {
+        width: 230px;
+        color: black;
+        background-color: $secondary-color;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 50px;
+        border-radius: 8px;
+        border-top-right-radius: 40px;
+
+        position: absolute;
+        left: 55%;
+        top: 80vh;
+
+        img {
+            padding-bottom: 15px;
+            cursor: pointer;
+        }
+    }
+}
+
+.dnone {
+    display: none;
+}
+
 @media (max-width: 900px) {
 
     //später überarbeiten
