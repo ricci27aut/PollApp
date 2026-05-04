@@ -1,4 +1,5 @@
 main{
+    max-width: 1440px;
     padding: 40px 80px 40px 80px;
     width: 100%;
     height: 100vh;
@@ -7,5 +8,21 @@ main{
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+
+    .content-container{
+        display: flex;
+        gap: 30px;
+    }
+
+    .survey-participation{
+        width: 60%;
+    }
+
+     .survey-results{
+        width: 30%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }

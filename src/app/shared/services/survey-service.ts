@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, RealtimeChannel } from '@supabase/supabase-js';
 
 @Injectable({
   providedIn: 'root',
@@ -9,11 +9,30 @@ export class SurveyService {
   supabaseKey = 'sb_publishable_JchZljAg8ekEHsnptMhN3Q_r8w5w9zm';
   sbSurvey = createClient(this.supabaseUrl, this.supabaseKey);
 
-  surveys: any[] = [];
+  surveys = signal<any[]>([]);
   endingSurveys = signal<any[]>([]);
   categorySurveys = signal<any[]>([])
-  pastSurveys = signal<any[]>([])
+  pastSurveys = signal<any[]>([]);
+  surveyQuestions = signal<any[]>([]);
+  channels: RealtimeChannel | undefined;
 
+  serverEventListener() {
+    if (this.channels) return;
+    this.channels = this.sbSurvey.channel('custom-all-channel')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'survey_list' },
+        (payload) => {
+          this.surveys.update(surveys => [...surveys, payload.new]);
+          this.updateSurveyLists();
+        }
+      )
+      .subscribe()
+  }
+
+  ngOnDestroy() {
+    if (this.channels) this.sbSurvey.removeChannel(this.channels);
+  }
 
   async getSurvey() {
     let { data: survey, error } = await this.sbSurvey
@@ -21,17 +40,22 @@ export class SurveyService {
       .select('id, title, description, ends_at, category')
     if (!survey) return;
 
-    this.surveys = survey ?? [];
-    this.getEndingSurveys()
-    this.getCategorySurveys('Team Activities')
-    /* his.serverEventListener() */
+    this.surveys.set(survey ?? []);
+    this.updateSurveyLists();
+    this.serverEventListener()
+  }
+
+  updateSurveyLists() {
+    this.getEndingSurveys();
+    this.getCategorySurveys('Team Activities');
   }
 
   async getSurveyQuestions(surveyId: number) {
-    return await this.sbSurvey
+    const { data, error } = await this.sbSurvey
       .from('questions')
       .select('*')
       .eq('survey_id', surveyId);
+      this.surveyQuestions.set(data ?? []);
   }
 
   async addSurvey(survey: { title: string, description: string, ends_at?: string | null, category: string }) {
@@ -57,7 +81,7 @@ export class SurveyService {
   getEndingSurveys() {
     const now = new Date().getTime();
 
-    const activeSurveys = this.surveys
+    const activeSurveys = this.surveys()
       .filter(survey => survey.ends_at)
       .filter(survey => new Date(survey.ends_at).getTime() >= now)
       .sort((a, b) =>
@@ -65,7 +89,7 @@ export class SurveyService {
       )
       .slice(0, 3);
 
-    const expiredSurveys = this.surveys
+    const expiredSurveys = this.surveys()
       .filter(survey => survey.ends_at)
       .filter(survey => new Date(survey.ends_at).getTime() < now)
       .sort((a, b) =>
@@ -77,70 +101,10 @@ export class SurveyService {
   }
 
   getCategorySurveys(category: string) {
-    const filteredSurveys = this.surveys.filter(
+    const filteredSurveys = this.surveys().filter(
       survey => survey.category === category
     );
 
     this.categorySurveys.set(filteredSurveys);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /*   serverEventListener() {
-      this.channels = this.supabase.channel('custom-all-channel')
-        .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table: 'products' },
-          (payload) => {
-            console.log('Change received!', payload)
-            this.products.set(payload.new as any);// reloadet die ganze seite produkt tabelle updait ändert in gegendatz nur ein element
-          }
-        )
-        .subscribe()
-    }
-  
-    ngOnDestroy() {
-      if (this.channels) this.supabase.removeChannel(this.channels);
-    }
-  
-     async deleteProduct(id: number) {
-      const { error } = await this.supabase
-        .from('products')
-        .delete()
-        .eq('id', id)// es wird das element mit der identischen id gelöscht
-  
-    } */
 }

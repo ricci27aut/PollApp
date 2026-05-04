@@ -90,6 +90,7 @@ export class CreateSurveyComponent {
   checkFormValue() {
     if (this.surveyForm.invalid || this.questionsForm.invalid) {return};
     this.publishSurvey()
+    this.userFeedBack();
   }
 
   handleSurveyChange(type: string) {
@@ -121,7 +122,6 @@ export class CreateSurveyComponent {
     });
 
     this.surveyService.addSurveyQuestons(questionsData)
-    this.userFeedBack();
   }
 
   AlowMultiAnswers(i: number) {

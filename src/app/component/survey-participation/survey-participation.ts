@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { SurveyService } from '../../shared/services/survey-service'
+import { SurveyResults} from '../survey-results/survey-results'
 
 @Component({
   selector: 'app-survey-participation',
@@ -12,6 +13,7 @@ import { SurveyService } from '../../shared/services/survey-service'
 export class SurveyParticipation implements OnInit {
   constructor(private route: ActivatedRoute) { }
   serviceData = inject(SurveyService)
+  resultsFunktion = inject(SurveyResults)
 
   surveyInfo = signal<any[]>([])
   surveyQuestons = signal<any[]>([])
@@ -20,16 +22,14 @@ export class SurveyParticipation implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    let d = this.serviceData.surveys.filter(survey => survey.id == id)
+    let d = this.serviceData.surveys().filter(survey => survey.id == id)
     this.surveyInfo.set(d)
-
-    this.loadQuestons()
+    this.loadQuestons(id);
   }
 
-  async loadQuestons() {
-    let id = this.route.snapshot.paramMap.get('id');
+  async loadQuestons(id: string | null) {
     let idNum: number = Number(id);
-    const { data, error } = await this.serviceData.getSurveyQuestions(idNum); // anschauen akleren lassen
-    this.surveyQuestons.set(data || [])
+    this.serviceData.getSurveyQuestions(idNum);
+    this.surveyQuestons.set(this.serviceData.surveyQuestions());
   }
 }

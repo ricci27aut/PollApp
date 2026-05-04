@@ -11,6 +11,5 @@ import { SurveyOverview } from '../component/survey-overview/survey-overview';
   styleUrl: './start-screen.scss',
 })
 export class StartScreen {
-
   showPastSurveys = false;
 }
