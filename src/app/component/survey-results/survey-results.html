@@ -1,10 +1,21 @@
-<section>
-    <div>
-        <h1>Survey results Live</h1>
-    </div>
-    <div *ngFor="let result of questions(); let i = index">
+<section [class.dnone]="!showResults">
+    <h1>Survey results<p>Live</p></h1>
+    <div *ngFor="let result of questions(); let i = index" class="queston-results-conatoner">
         <h2>{{ i + 1 }}. {{ result.question }}</h2>
-        <div><p>{{letters[i]}}</p><div class=""></div><p></p></div>
+        <div *ngFor="let answer of result.answers; let j = index" class="results-container">
+            <p>{{letters[j]}}</p>
+            <div class="vote-bar">
+                <div class="vote-fill"></div>
+            </div>
+            <p>{{getPercentage(result.answer_votes[j]) }}%</p>
+        </div>
     </div>
+</section>
 
+<section [class.dnone]="showResults">
+    <h1>Survey Results<p>Live</p></h1>
+    <span>Results will be shown here after participants complete the survey.</span>
+    <div class="results-container paddding-100px-top">
+        <h3 class="noAnswears">There are no answears yet.</h3>
+    </div>
 </section>

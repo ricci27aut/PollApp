@@ -25,7 +25,8 @@ export class CreateSurveyComponent {
     title: ['', Validators.required],
     description: [''],
     end_at: [''],
-    category: ['']
+    category: [''],
+    votings: [0]
   });
 
   questionsForm = this.fb.group({
@@ -41,7 +42,8 @@ export class CreateSurveyComponent {
       answers: this.fb.array([
         this.fb.control('', Validators.required),
         this.fb.control('', Validators.required)
-      ])
+      ]),
+      answer_votes: this.fb.array([0 , 0]),
     });
   }
 
@@ -58,6 +60,10 @@ export class CreateSurveyComponent {
     this.questions.push(this.createQuestion());
   }
 
+  answer_votes(i: number) {
+  return this.questions.at(i).get('answer_votes') as FormArray;
+}
+
   deleteQuestion(i: number) {
     if (i === 0) {
       this.questions.at(i).reset({
@@ -73,6 +79,7 @@ export class CreateSurveyComponent {
   addAnswer(i: number) {
     if (this.answers(i).length >= 6) return;
     this.answers(i).push(this.fb.control(''));
+    this.answer_votes(i).push(this.fb.control(0));
   }
 
   deleteAnswer(i: number, y: number) {
@@ -80,6 +87,7 @@ export class CreateSurveyComponent {
       this.answers(i).at(y).setValue('');
     } else {
       this.answers(i).removeAt(y);
+      this.answer_votes(i).removeAt(y);
     }
   }
 
@@ -103,6 +111,7 @@ export class CreateSurveyComponent {
       description: this.surveyForm.controls.description.value || '',
       ends_at: this.surveyForm.controls.end_at.value || new Date().toISOString(),
       category: this.surveyForm.controls.category.value || 'Team Activities',
+      votings: this.surveyForm.controls.votings.value || 0
     };
 
     const newSurvey = await this.surveyService.addSurvey(formData);
@@ -117,7 +126,9 @@ export class CreateSurveyComponent {
       return {
         survey_id: id,
         question: question.question,
-        answers: question.answers
+        answers: question.answers,
+        allowMultiple: question.allowMultiple,
+        answer_votes: question.answer_votes
       };
     });
 

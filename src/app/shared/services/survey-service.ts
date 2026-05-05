@@ -27,7 +27,8 @@ export class SurveyService {
           this.updateSurveyLists();
         }
       )
-      .subscribe()
+      .subscribe((status) => {
+      });
   }
 
   ngOnDestroy() {
@@ -37,7 +38,7 @@ export class SurveyService {
   async getSurvey() {
     let { data: survey, error } = await this.sbSurvey
       .from('survey_list')
-      .select('id, title, description, ends_at, category')
+      .select('id, title, description, ends_at, category, votings');
     if (!survey) return;
 
     this.surveys.set(survey ?? []);
@@ -55,10 +56,10 @@ export class SurveyService {
       .from('questions')
       .select('*')
       .eq('survey_id', surveyId);
-      this.surveyQuestions.set(data ?? []);
+    this.surveyQuestions.set(data ?? []);
   }
 
-  async addSurvey(survey: { title: string, description: string, ends_at?: string | null, category: string }) {
+  async addSurvey(survey: { title: string, description: string, ends_at?: string | null, category: string, votings:number}) {
     const { data, error } = await this.sbSurvey
       .from('survey_list')
       .insert([survey])
@@ -71,6 +72,8 @@ export class SurveyService {
     survey_id: number,
     question: string,
     answers: string[]
+    allowMultiple: boolean,
+    answer_votes: number[];
   }[]) {
     const { data, error } = await this.sbSurvey
       .from('questions')
@@ -107,4 +110,23 @@ export class SurveyService {
 
     this.categorySurveys.set(filteredSurveys);
   }
+
+  async updateQuestionVotes(questionId: number, answerVotes: number[]) {
+  const { data, error } = await this.sbSurvey
+    .from('questions')
+    .update({ answer_votes: answerVotes })
+    .eq('id', questionId)
+    .select();
+
+  return data;
+}
+
+ async incrementSurveyVotings(surveyId: number){
+  const survey = this.surveys().find(s => s.id === surveyId);
+  const { data, error } = await this.sbSurvey
+  .from('survey_list')
+  .update({ votings: survey.votings + 1 })
+  .eq('id', surveyId)
+  .select();
+ }
 }

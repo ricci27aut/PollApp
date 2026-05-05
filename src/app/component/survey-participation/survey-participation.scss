@@ -53,10 +53,15 @@
         .queston-area {
             margin-bottom: 20px;
 
-            h2 {
-                font-size: 18px;
-                font-weight: 700;
-                font-style: bold;
+            .queston-header {
+                h2 {
+                    font-size: 18px;
+                    font-weight: 700;
+                    font-style: bold;
+                    margin-bottom: 5px;
+                }
+
+                margin-bottom:20px;
             }
 
             .userFeedback {
@@ -66,22 +71,54 @@
             }
 
             .answer-option {
-                margin-top: 20px;
                 margin-left: 20px;
                 display: flex;
                 flex-direction: column;
-                row-gap: 7px;
 
                 .check-icon {
                     width: 15px;
-                    cursor: pointer;
                 }
 
                 div {
                     @include flex-start;
-                    gap: 20px
+                    gap: 20px;
+                    min-width: 50%;
+                    width: fit-content;
                 }
+
+                .singel-answer {
+                    cursor: pointer;
+                    padding: 3px;
+
+                    &:hover {
+                        background-color: $inactive-color;
+                        border-radius: 8px;
+                    }
+                }
+
+
             }
         }
     }
+}
+
+.submit-btn {
+    position: absolute;
+    top: 85vh;
+    left: 33%;
+    padding: 7px 12px 7px 12px;
+    border-radius: 8px;
+    width: fit-content;
+    background-color: $secondary-color;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    &:hover {
+        background-color: $inactive-color;
+    }
+}
+
+.dnone {
+    display: none;
 }
