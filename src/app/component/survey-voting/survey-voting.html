@@ -1,9 +1,8 @@
 <main>
-    <header><img src="assets/img/Logo-dark.png"><app-start-survey-button-component></app-start-survey-button-component>
+    <header><a routerLink="/"><img src="assets/img/Logo-dark.png"></a><app-start-survey-button-component class="mobile-new-survey-btn"></app-start-survey-button-component>
     </header>
     <section class="content-container">
-        <app-survey-participation class="survey-participation"
-            (votingSubmitted)="surveyResults.loadSurveyResults()"></app-survey-participation>
-        <app-survey-results class="survey-results" #surveyResults class="survey-results"></app-survey-results>
+        <app-survey-participation class="survey-participation"></app-survey-participation>
+        <app-survey-results class="survey-results" class="survey-results"></app-survey-results>
     </section>
 </main>

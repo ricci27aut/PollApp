@@ -16,11 +16,9 @@ export class SurveyOverview {
   selectedArray: string = 'survey'
   @Input() showPastSurveys: boolean = false;
 
-  get displayedSurveys() {
-    return this.showPastSurveys
-      ? this.surveyService.pastSurveys()
-      : this.surveyService.categorySurveys();
-  }
+ get displayedSurveys() {
+  return this.surveyService.categorySurveys();
+}
 
   showLeftDays(endDate: number) {
     const today = new Date();
@@ -29,9 +27,11 @@ export class SurveyOverview {
     const differenceInMs = end.getTime() - today.getTime();
     const differenceInDays = Math.ceil(differenceInMs / (1000 * 60 * 60 * 24));
 
-    if (differenceInDays <= 0) {
+    if (differenceInDays === 0) {
       return 'Ends Today'
-    } else {
+    }else if(differenceInDays <= 0){
+      return 'Survey Ended'
+    }else {
       return `Ends in ${differenceInDays} Days`;
     }
   }

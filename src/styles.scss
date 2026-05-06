@@ -4,54 +4,67 @@ $home-bg: #35273A;
 $primary-color: #FFB770;
 $inactive-color: #FFCFA1;
 $secondary-color: #FEE9D4;
-$braun-btn-primary:#7B5B55;
+$braun-btn-primary: #7B5B55;
 
 /* body{
     background-color: $home-bg; // vl für später
 } */
 
-.max-width-content{
+.max-width-content {
     max-width: 1440px;
 }
 
-@mixin flex-column{
+@mixin flex-column {
     display: flex;
     flex-direction: column;
 }
 
-@mixin flex-start{
+@mixin flex-start {
     display: flex;
     justify-content: start;
     align-items: center;
 }
 
-@mixin flex-center{
+@mixin flex-center {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-button{
+button {
     cursor: pointer;
     border: none;
 }
 
 input {
-  border: none;
-  outline: none;
-  box-shadow: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
 }
 
-textarea{
-border: none;
-  outline: none;
-  box-shadow: none;
-  resize: none;
+textarea {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    resize: none;
 }
 
+@font-face {
+    font-family: 'Mulish';
+    src: url('../public/fonts/Mulish/Mulish-VariableFont_wght.ttf') format('truetype');
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+  font-family: 'NerkoOne';
+  src: url('../public/fonts/Nerko_One/NerkoOne-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}

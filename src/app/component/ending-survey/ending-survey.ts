@@ -27,7 +27,7 @@ export class EndingSurvey {
     }
   }
 
-  showSurveyVoting(title: string) {
-    this.router.navigate(['/survey', title, 'voting']);
+ showSurveyVoting(title: string, id: number) {
+    this.router.navigate([id, title, 'voting']);
   }
 }

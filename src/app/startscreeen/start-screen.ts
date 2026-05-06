@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { StartSurveyButtonComponent } from '../component/start-survey-button-component/start-survey-button-component';
 import { DropdownMenu } from '../component/dropdown-menu/dropdown-menu'
 import { EndingSurvey } from '../component/ending-survey/ending-survey'
 import { SurveyOverview } from '../component/survey-overview/survey-overview';
+import { SurveyService } from '../shared/services/survey-service';
+
 
 @Component({
   selector: 'app-start-screen',
@@ -11,5 +13,8 @@ import { SurveyOverview } from '../component/survey-overview/survey-overview';
   styleUrl: './start-screen.scss',
 })
 export class StartScreen {
+  surveyService = inject(SurveyService);
+
   showPastSurveys = false;
+  selectedCategory = 'Team Activities';
 }

@@ -6,6 +6,6 @@
     <p class="userFeedback" [class.dnone]="isSelected || !isClosed">{{categories[whichChoice]}}</p>
 
     <div class="categories-container" [class.dnone]="isClosed">
-        <p *ngFor="let categorie of categories; let i = index" (click)="showChoice(i); surveyService.getCategorySurveys(categorie)">{{categories[i]}}</p>
+        <p *ngFor="let categorie of categories; let i = index" (click)="showChoice(i); surveyService.getCategorySurveys(categorie, showPastSurveys)">{{categories[i]}}</p>
     </div>
 </article>

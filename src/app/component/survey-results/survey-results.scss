@@ -11,7 +11,6 @@
     .vote-fill {
         background-color: $primary-color;
         height: 100%;
-        width: 20%;
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
     }
@@ -28,13 +27,16 @@ section {
     flex-direction: column;
     row-gap: 20px;
 
+    font-family: 'Mulish', sans-serif;
+
     h1 {
+        font-family: 'NerkoOne', sans-serif;
         font-weight: 400;
         font-size: 32px;
         display: flex;
         gap: 5px;
         margin-block-start: 0em;
-    margin-block-end: 0em;
+        margin-block-end: 0em;
         width: max-content;
 
         p {
@@ -74,4 +76,10 @@ section {
 
 .paddding-100px-top {
     padding-top: 100px;
+}
+
+@media (max-width: 1000px) {
+    section {
+        margin-top: 50px;
+    }
 }

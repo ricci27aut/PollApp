@@ -3,9 +3,9 @@
     <div *ngFor="let result of questions(); let i = index" class="queston-results-conatoner">
         <h2>{{ i + 1 }}. {{ result.question }}</h2>
         <div *ngFor="let answer of result.answers; let j = index" class="results-container">
-            <p>{{letters[j]}}</p>
+            <p><strong>{{letters[j]}}</strong></p>
             <div class="vote-bar">
-                <div class="vote-fill"></div>
+                <div class="vote-fill"  [style.width.%]="getPercentage(result.answer_votes[j])"></div>
             </div>
             <p>{{getPercentage(result.answer_votes[j]) }}%</p>
         </div>

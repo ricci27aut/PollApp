@@ -48,7 +48,7 @@ export class SurveyService {
 
   updateSurveyLists() {
     this.getEndingSurveys();
-    this.getCategorySurveys('Team Activities');
+    this.getCategorySurveys('Team Activities', false);
   }
 
   async getSurveyQuestions(surveyId: number) {
@@ -59,7 +59,7 @@ export class SurveyService {
     this.surveyQuestions.set(data ?? []);
   }
 
-  async addSurvey(survey: { title: string, description: string, ends_at?: string | null, category: string, votings:number}) {
+  async addSurvey(survey: { title: string, description: string, ends_at?: string | null, category: string, votings: number }) {
     const { data, error } = await this.sbSurvey
       .from('survey_list')
       .insert([survey])
@@ -103,30 +103,35 @@ export class SurveyService {
     this.pastSurveys.set(expiredSurveys);
   }
 
-  getCategorySurveys(category: string) {
-    const filteredSurveys = this.surveys().filter(
-      survey => survey.category === category
-    );
+  getCategorySurveys(category: string, showPastSurveys: boolean) {
+    const now = Date.now();
+
+    const filteredSurveys = this.surveys()
+      .filter(survey => survey.category === category)
+      .filter(survey => {
+        const isPast = new Date(survey.ends_at).getTime() < now;
+        return showPastSurveys ? isPast : !isPast;
+      });
 
     this.categorySurveys.set(filteredSurveys);
   }
 
   async updateQuestionVotes(questionId: number, answerVotes: number[]) {
-  const { data, error } = await this.sbSurvey
-    .from('questions')
-    .update({ answer_votes: answerVotes })
-    .eq('id', questionId)
-    .select();
+    const { data, error } = await this.sbSurvey
+      .from('questions')
+      .update({ answer_votes: answerVotes })
+      .eq('id', questionId)
+      .select();
 
-  return data;
-}
+    return data;
+  }
 
- async incrementSurveyVotings(surveyId: number){
-  const survey = this.surveys().find(s => s.id === surveyId);
-  const { data, error } = await this.sbSurvey
-  .from('survey_list')
-  .update({ votings: survey.votings + 1 })
-  .eq('id', surveyId)
-  .select();
- }
+  async incrementSurveyVotings(surveyId: number) {
+    const survey = this.surveys().find(s => s.id === surveyId);
+    const { data, error } = await this.sbSurvey
+      .from('survey_list')
+      .update({ votings: survey.votings + 1 })
+      .eq('id', surveyId)
+      .select();
+  }
 }

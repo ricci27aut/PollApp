@@ -1,9 +1,10 @@
 <main class="max-width-content">
     <section class="create-survey">
+        <img class="logo-possition" src="assets/img/Logo-dark.png">
         <img [src]="publishedIconPath">
         <header>
             <h1>Create new survey</h1>
-            <button class="form-btn-brown" type="button" routerLink="">Cancel<img
+            <button class="form-btn-brown X-mobile" type="button" routerLink=""><span class="dnone-mobile">Cancel</span><img
                     src="assets/img/CeateSurvey/X.png"></button>
         </header>
 
@@ -17,13 +18,12 @@
                     </div>
 
                     <label class="padding-top-10px padding-bottom-5px" for="end_at">Set end date (optional)</label>
-                    <div class="input-group"><input style="width: 70%;" id="end_at" type="text"
-                            formControlName="end_at">
-                        <img (click)="cleanInput('end_at')" class="delete-icon" src="assets/img/CeateSurvey/delete.png">
-                        <div class="possition-dropdown">
-                            <app-dropdown-menu headline="Choose category"
-                                (surveySelected)="handleSurveyChange($event)"></app-dropdown-menu>
+                    <div class="input-group category-container">
+                        <div class="date-contaoner"> <input style="width: 60%;" id="end_at" type="text" formControlName="end_at">
+                            <img (click)="cleanInput('end_at')" class="delete-icon"
+                                src="assets/img/CeateSurvey/delete.png">
                         </div>
+                        <app-dropdown-menu headline="Choose category" (surveySelected)="handleSurveyChange($event)"></app-dropdown-menu>
                     </div>
                 </div>
                 <div class="description_Section">
@@ -72,7 +72,7 @@
                             (click)="addAnswer(i)">Add answer
                             <img src="assets/img/CeateSurvey/add_circle_with.png"></button>
                     </div>
-                    <div class="question-container">
+                    <div class="question-container mobile-brown-btn">
                         <button class="form-btn-brown add-question-btn" [disabled]="questions.length >= 4" type="button"
                             (click)="addQuestion()">Add next
                             question<img src="assets/img/CeateSurvey/add_circle_with.png"></button>
@@ -81,7 +81,8 @@
             </form>
         </form>
         <div class="btn-Supmit">
-            <button (click)="checkFormValue()" type="submit" class="publishBtn" type="submit" [disabled]="!questionsForm.valid">Publish
+            <button (click)="checkFormValue()" type="submit" class="publishBtn" type="submit"
+                [disabled]="!questionsForm.valid">Publish
                 <img src="assets/img/CeateSurvey/check-btn.png">
             </button>
         </div>

@@ -4,7 +4,7 @@ main {
     background-color: $home-bg;
     background-repeat: repeat;
     min-height: 100vh;
-    width: 100%;
+    min-width: 100%;
     color: white;
     padding: 0 clamp(20px, 5vw, 120px) 0 clamp(20px, 5vw, 120px);
 }
@@ -17,22 +17,34 @@ header {
 
     aside {
         display: flex;
+        flex-direction: column;
 
-        >.Poll-Logo {
-            padding-top: 40px; // noch anpassen 
+        .Poll-Logo {
+            padding-top: 40px;
             width: 140px;
         }
     }
 
-    h1 {
-        margin-top: 60px;
-        color: $primary-color;
-        font-size: clamp(40px, 8vw, 100px);
+    .h1-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h1 {
+            max-width: 900px;
+            padding-top: 60px;
+            color: $primary-color;
+            font-size: clamp(40px, 7vw, 100px);
+            font-family: 'NerkoOne', sans-serif;
+            font-weight: 400;
+        }
     }
 }
 
 .lead-description {
-    font-size: 24px; // noch anpassen 
+    font-size: clamp(18px, 2vw, 24px);
+    font-family: 'Mulish', sans-serif;
+    font-weight: 400;
     width: 60%;
 }
 
@@ -41,25 +53,38 @@ header {
 }
 
 .surveys-section {
-    margin: 100px 0px 0 clamp(20px, 5vw, 150px);
+    margin-top: 50px;
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
+    width: 100%;
 
     h2 {
-        text-align: center;
         color: $primary-color;
-        font-size: clamp(54px, 3vw, 72px); // noch anpassen 
+        font-size: clamp(54px, 5vw, 72px);
+        font-family: 'NerkoOne', sans-serif;
+        font-weight: 400;
     }
-
 }
 
 .survey-group {
+    width: 100%;
+    flex-direction: column;
     margin-top: 40px;
     margin-bottom: 40px;
 
     h3 {
-        font-size: clamp(24px, 3vw, 32px); // noch anpassen   
+        font-size: clamp(24px, 3vw, 32px);
+        font-family: 'Mulish', sans-serif;
+        font-weight: 500;
     }
+}
+
+.overviw-container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
 }
 
 .survey-toolbar {
@@ -82,8 +107,6 @@ header {
     background-color: $primary-color;
 }
 
-;
-
 .btn-past {
     background-color: $secondary-color;
 
@@ -92,12 +115,22 @@ header {
     }
 }
 
+.ending-scroll-wrapper {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
 .ending-soon-surveys {
-    margin: 50px 0 0px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
+  display: flex;
+  gap: 80px;
+  width: max-content;
+}
+
+.ending-soon-area {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .category-style {
@@ -111,6 +144,7 @@ header {
 
 .active-and-past-surveys {
     max-height: 400px;
+    min-height: 200px;
     overflow-y: auto;
     overflow-x: hidden;
 
@@ -126,5 +160,119 @@ header {
         background: $primary-color;
         border-radius: 10px;
         max-height: 20px;
+    }
+}
+
+.hover-phone {
+    position: relative;
+    max-height: fit-content;
+
+    .phone-image {
+        width: clamp(343px, 5vw, 400px);
+        position: relative;
+        z-index: 2;
+    }
+
+    .star-image {
+        width: clamp(50px, 5vw, 60px);
+        position: absolute;
+        bottom: 20px;
+        left: 25px;
+        z-index: 5;
+    }
+
+    .bubble-image {
+        width: clamp(70px, 5vw, 90px);
+        position: absolute;
+        top: 70px;
+        left: 50px;
+        z-index: 5;
+    }
+
+    .question-mark-image {
+        width: clamp(40px, 5vw, 60px);
+        position: absolute;
+        top: 0px;
+        right: 25px;
+        rotate: 10deg;
+        z-index: 5;
+    }
+
+    .tick-image {
+        width: clamp(50px, 5vw, 60px);
+        position: absolute;
+        top: 250px;
+        right: 50px;
+        z-index: 1;
+    }
+
+    &:hover {
+        .star-image {
+            transition: 300ms steps(1);
+            transform: translateX(-15px)
+        }
+
+        .bubble-image {
+            transition: 300ms steps(1);
+            transform: translateX(-10px) scale(1.5)
+        }
+
+        .question-mark-image {
+            transition: 300ms steps(1);
+            transform: rotate(-10deg) translateX(-10px)
+        }
+
+        .tick-image {
+            transition: 300ms steps(1);
+            transform: translateX(30px)
+        }
+    }
+}
+
+.flex-center {
+    @include flex-center;
+    width: 100%;
+}
+
+
+@media (max-width: 940px) {
+    .h1-container {
+        justify-content: start;
+        flex-direction: column;
+
+        h1 {
+            margin-bottom: 30px;
+        }
+    }
+
+    .lead-description {
+        margin-top: 30px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .surveys-section {
+        width: 100%;
+    }
+
+    .category-style{
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 30px;
+    }
+}
+
+@media (max-width: 550px) {
+    .survey-toolbar{
+        flex-direction: column;
+        align-items: flex-start;
+        row-gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .button-position{
+        @include flex-center
     }
 }

@@ -11,6 +11,7 @@ import { SurveyService } from '../../shared/services/survey-service'
 export class DropdownMenu {
   @Input() headline: string = 'Surveys';
   @Output() surveySelected = new EventEmitter<string>();
+  @Input() showPastSurveys: boolean = false;
   surveyService = inject(SurveyService)
 
   categories = ['Team Activities', 'Health & Wellness', 'Gaming & Entertainment', 'Education & Learning', 'Lifestyle & Preferences', 'Technology & Innovation',]

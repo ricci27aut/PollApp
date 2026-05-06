@@ -1,49 +1,62 @@
 <main>
     <header class="max-width-content">
-
         <aside>
             <img class="Poll-Logo" src='assets/img/Logo.png' alt="Logo">
         </aside>
-
         <aside>
-            <div>
+            <div class="h1-container">
                 <h1>Collect Feedback, Unlock Ideas</h1>
-                <p class="lead-description"><strong>Create and share surveys in minutes – from team events to workplace
-                        culture. Collect
-                        opinions,
-                        engage
-                        your audience, and turn feedback into action.</strong></p>
-                <div class="button-position"><app-start-survey-button-component></app-start-survey-button-component></div>
+                <div class="hover-phone">
+                    <img class="phone-image" src="assets/img/home-phone/phone.png" alt="Phone">
+                    <img class="star-image" src="assets/img/home-phone/star.png" alt="star">
+                    <img class="bubble-image" src="assets/img/home-phone/bubble.png" alt="bubble">
+                    <img class="question-mark-image" src="assets/img/home-phone/question-mark.png" alt="question-mark">
+                    <img class="tick-image" src="assets/img/home-phone/tick.png" alt="tick">
+                </div>
             </div>
-
-            <div>
-                <img src="assets/img/Phone.png" alt="Phone">
+            <p class="lead-description">
+                <strong>Create and share surveys in minutes –
+                    from team events to workplace culture. Collect opinions, engage
+                    your audience, and turn feedback into action.
+                </strong>
+            </p>
+            <div class="button-position">
+                <app-start-survey-button-component></app-start-survey-button-component>
             </div>
         </aside>
 
     </header>
 
     <section class="max-width-content surveys-section">
-        <h2>Your surveys</h2>
-
         <section class="survey-group">
-            <h3>Ending soon surveys</h3>
-            <div><app-ending-survey class="ending-soon-surveys"></app-ending-survey></div>
+            <div class="ending-soon-area">
+                <div class="flex-center">
+                    <h2>Your surveys</h2>
+                </div>
+                <h3>Ending soon surveys</h3>
+                <div class="ending-scroll-wrapper">
+                    <app-ending-survey class="ending-soon-surveys"></app-ending-survey>
+                </div>
+            </div>
         </section>
 
-        <section class="survey-group">
-
+        <section class="survey-group overview-container-mobile overviw-container">
             <div class="survey-toolbar">
                 <div style="gap: 24px; display: flex;">
-                    <button class="btn-active" (click)="showPastSurveys = false">Active survey</button>
-                    <button class="btn-past" (click)="showPastSurveys = true">Past survey</button>
+                    <button class="btn-active"
+                        (click)="showPastSurveys = false;  surveyService.getCategorySurveys(selectedCategory, showPastSurveys)">Active
+                        survey</button>
+                    <button class="btn-past"
+                        (click)="showPastSurveys = true; surveyService.getCategorySurveys(selectedCategory, showPastSurveys)">Past
+                        survey</button>
                 </div>
-            <div>
-              <app-dropdown-menu headline="Sort by category"></app-dropdown-menu>
+                <div>
+                    <app-dropdown-menu headline="Sort by category"
+                        [showPastSurveys]="showPastSurveys"></app-dropdown-menu>
+                </div>
             </div>
-            </div>
-            <div class="active-and-past-surveys"><app-survey-overview class="category-style" [showPastSurveys]="showPastSurveys"></app-survey-overview></div>
+            <div class="active-and-past-surveys"><app-survey-overview class="category-style"
+                    [showPastSurveys]="showPastSurveys"></app-survey-overview></div>
         </section>
     </section>
-
 </main>

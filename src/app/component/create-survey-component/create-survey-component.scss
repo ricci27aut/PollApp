@@ -1,9 +1,12 @@
 @use '../../../styles.scss' as *;
 
 main {
-    @include flex-center;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
     color: white;
     min-height: 100vh;
+    font-family: 'Mulish';
 
     input {
         border-radius: 4px;
@@ -23,8 +26,8 @@ main {
     border-top-right-radius: 100px;
     background-color: $home-bg;
     width: 85%;
-    min-height: 60vh;
-    padding: 40px;
+    height: fit-content;
+    padding: 30px;
     margin: 20px 0 20px 0;
 }
 
@@ -33,7 +36,9 @@ header {
     justify-content: space-between;
 
     >h1 {
-        font-size: 56px; // ändern
+        font-family: 'NerkoOne';
+        font-size: 56px;
+        font-weight: 400;
         color: #EE9236;
     }
 }
@@ -59,12 +64,11 @@ header {
 }
 
 .formGroup {
-    margin-top: 30px;
+    margin-top: 20px;
     background-color: #433349;
     border-radius: 8px;
     border-top-right-radius: 100px;
     width: 100%;
-    min-height: 60vh;
 }
 
 .survey-details {
@@ -72,7 +76,7 @@ header {
     justify-content: space-between;
     padding: 30px 30px 0px 30px;
     width: 100%;
-    gap: 100px;
+    gap: clamp(30px, 7vw, 100px);
 
     font-weight: 700;
     font-size: 18px;
@@ -256,11 +260,16 @@ header {
     margin-left: 6%;
 }
 
-.possition-dropdown {
+.date-contaoner {
     width: 50%;
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-start;
+    gap: 5px;
+
+    >input {
+        width: 100% !important;
+    }
 }
 
 input.invalid {
@@ -272,8 +281,9 @@ input.invalid {
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.141);
     position: absolute;
-        left: 0;
-        top: 0;
+    left: 0;
+    top: 0;
+
     .userMessage {
         width: 230px;
         color: black;
@@ -301,11 +311,86 @@ input.invalid {
     display: none;
 }
 
-@media (max-width: 900px) {
+.logo-possition {
+    position: absolute;
+    top: 30px;
+    left: 5%;
+    display: none;
+}
 
-    //später überarbeiten
+@media (max-width: 900px) {
+    .survey-details {
+        flex-direction: column;
+    }
+
     .questions-section .question-container {
         flex: 0 0 100%;
         max-width: 100%;
+        width: 100%;
+    }
+
+    .description_Section {
+        height: 150px;
+        width: 100% !important;
+    }
+
+    .category-container {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+
+    .title_Section {
+        width: 100% !important;
+    }
+
+    .date-contaoner {
+        width: 100%;
+    }
+
+    .mobile-brown-btn {
+        align-items: center;
+    }
+
+    .btn-Supmit {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 770px) {
+    .dnone-mobile {
+        display: none;
+    }
+
+    .form-btn-brown {
+        width: fit-content;
+        padding: 0 5px 0 5px;
+    }
+
+    h1 {
+        margin-top: 5px;
+        line-height: 0.7;
+    }
+
+}
+
+@media (max-width: 500px) {
+    .create-survey {
+        width: 100% !important;
+        margin-top: 60px;
+        padding: 20px;
+    }
+
+    .logo-possition {
+        display: inline;
+    }
+
+    .survey-details {
+        padding: 50px 5px 50px 5px;
+    }
+
+    .X-mobile {
+        position: relative;
+        right: 50px;
+        top: -55px;
     }
 }

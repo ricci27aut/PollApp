@@ -10,7 +10,7 @@
         <h1>{{ surveyInfo()[0].title }}</h1>
         <h3>{{ surveyInfo()[0].description }}</h3>
     </header>
-    <section>
+    <section class="queston-conatiner">
         <div class="queston-area" *ngFor="let question of surveyQuestons(),let i = index">
             <div class="queston-header">
                 <h2>{{ i + 1 }}. {{ question.question }}</h2>
@@ -23,11 +23,13 @@
                     <img class="check-icon" [src]="isAnswerSelected(question, i)
                         ? 'assets/img/CeateSurvey/checkbox_fokus.png'
                         : 'assets/img/CeateSurvey/checkboxs.png'">
-                    <p>{{letters[i]}}<span>{{answer}}</span></p>
+                    <p><strong>{{letters[i]}}</strong>{{answer}}</p>
                 </div>
             </div>
         </div>
-        <button class="submit-btn" (click)="submitVoting()" type="button">Complete survey</button>
     </section>
-
+ <div class="button-container">
+        <p [class.dnone]="!notAllAnswersSelected">Please answer all questions.</p>
+        <button class="submit-btn" (click)="submitVoting()" type="button">Complete survey</button>
+        </div>
 </form>

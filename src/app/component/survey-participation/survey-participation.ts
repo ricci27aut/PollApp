@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SurveyService } from '../../shared/services/survey-service'
 
 
@@ -13,6 +13,7 @@ import { SurveyService } from '../../shared/services/survey-service'
 export class SurveyParticipation implements OnInit {
   constructor(private route: ActivatedRoute) { }
   serviceData = inject(SurveyService)
+  router = inject(Router);
 
   @Output() votingSubmitted = new EventEmitter<void>();
 
@@ -22,7 +23,8 @@ export class SurveyParticipation implements OnInit {
 
   letters = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.'];
 
-  pathIcon = 'assets/img/CeateSurvey/checkboxs.png';
+  notAllAnswersSelected = false;
+
 
   async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
@@ -42,10 +44,13 @@ export class SurveyParticipation implements OnInit {
   }
 
   async submitVoting() {
+    if (!this.allQuestionsAnswered()) {
+    this.notAllAnswersSelected = true;
+    return;
+  }
     await this.publsichQuestonVotings();
     await this.serviceData.incrementSurveyVotings(this.surveyInfo()[0].id);
-    await this.serviceData.getSurvey();
-    this.votingSubmitted.emit();
+    this.router.navigate(['/']);
   }
 
   toggleAnswer(question: any, answerIndex: number) {
@@ -66,20 +71,25 @@ export class SurveyParticipation implements OnInit {
   async publsichQuestonVotings() {
     for (const question of this.surveyQuestons()) {
       const selected = this.selectedAnswers[question.id] ?? [];
-
       if (!selected.length) continue;
-
       const updatedVotes = [...question.answer_votes];
-
       selected.forEach(answerIndex => {
         updatedVotes[answerIndex] = (updatedVotes[answerIndex] ?? 0) + 1;
       });
 
       await this.serviceData.updateQuestionVotes(question.id, updatedVotes);
+      this.router.navigate(['/']);
     }
   }
 
   isAnswerSelected(question: any, answerIndex: number) {
     return this.selectedAnswers[question.id]?.includes(answerIndex) ?? false;
   }
+
+  allQuestionsAnswered() {
+  return this.surveyQuestons().every(question => {
+    const selected = this.selectedAnswers[question.id] ?? [];
+    return selected.length > 0;
+  });
+}
 }
