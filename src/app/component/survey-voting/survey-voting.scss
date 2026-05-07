@@ -1,6 +1,6 @@
 main{
     max-width: 1440px;
-    padding: 40px 80px 40px 80px;
+    padding: 20px 80px 40px 80px;
     width: 100%;
     height: 100vh;
     header{
@@ -55,7 +55,7 @@ main{
     }
 }
 
-@media (max-width: 340px) {
+@media (max-width: 450px) {
     .mobile-new-survey-btn{
 display: none;
     }

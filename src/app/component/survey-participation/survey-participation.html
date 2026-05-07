@@ -1,14 +1,17 @@
 <form class="formParticipation">
     <header>
         <div class="survey-meta">
-            <img class="published-icon" src="assets/img/CeateSurvey/published.png">
+            <div class="btn-back-to-home">
+                <img class="published-icon" src="assets/img/CeateSurvey/published.png">
+                <button [routerLink]="['/']" type="button"><img src="assets/img/close.png" alt="back to home"></button>
+            </div>
             <div class="survey-meta__info">
-                <p>Ends on {{surveyInfo()[0].ends_at}}</p>
-                <p>Category:{{ surveyInfo()[0].category }}</p>
+                <p>Ends on {{surveyInfo()[0]?.ends_at}}</p>
+                <p>Category:{{ surveyInfo()[0]?.category }}</p>
             </div>
         </div>
-        <h1>{{ surveyInfo()[0].title }}</h1>
-        <h3>{{ surveyInfo()[0].description }}</h3>
+        <h1>{{ surveyInfo()[0]?.title }}</h1>
+        <h3>{{ surveyInfo()[0]?.description }}</h3>
     </header>
     <section class="queston-conatiner">
         <div class="queston-area" *ngFor="let question of surveyQuestons(),let i = index">
@@ -28,8 +31,10 @@
             </div>
         </div>
     </section>
- <div class="button-container">
+    <div class="button-container">
         <p [class.dnone]="!notAllAnswersSelected">Please answer all questions.</p>
-        <button class="submit-btn" (click)="submitVoting()" type="button">Complete survey</button>
-        </div>
+        <p *ngIf="isSurveyEnded()">This survey has ended.</p>
+        <button [class.dnone]="isSurveyEnded()" class="submit-btn" (click)="submitVoting()" type="button">Complete
+            survey</button>
+    </div>
 </form>

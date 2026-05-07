@@ -13,7 +13,12 @@ export class EndingSurvey {
   constructor(private router: Router) {}
   surveyService = inject(SurveyService)
 
-  showLeftDays(endDate: number) {
+  /**
+   * Creates a readable status text for the survey end date.
+   * @param endDate The survey end date.
+   * @returns A text that describes when the survey ends.
+   */
+  showLeftDays(endDate: string | number): string {
     const today = new Date();
     const end = new Date(endDate);
 
@@ -27,7 +32,12 @@ export class EndingSurvey {
     }
   }
 
- showSurveyVoting(title: string, id: number) {
+ /**
+  * Navigates to the voting page for the selected survey.
+  * @param title The selected survey title.
+  * @param id The selected survey id.
+  */
+ showSurveyVoting(title: string, id: number): void {
     this.router.navigate([id, title, 'voting']);
   }
 }

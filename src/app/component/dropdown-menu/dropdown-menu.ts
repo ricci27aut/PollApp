@@ -14,26 +14,36 @@ export class DropdownMenu {
   @Input() showPastSurveys: boolean = false;
   surveyService = inject(SurveyService)
 
-  categories = ['Team Activities', 'Health & Wellness', 'Gaming & Entertainment', 'Education & Learning', 'Lifestyle & Preferences', 'Technology & Innovation',]
-  iconPath = 'assets/img/dropDown/arrow_drop_down.png'
-  isHover = false;
-  isClosed = true;
-  isSelected = true;
-  whichChoice = 0;
+  categories: string[] = ['Team Activities', 'Health & Wellness', 'Gaming & Entertainment', 'Education & Learning', 'Lifestyle & Preferences', 'Technology & Innovation',]
+  iconPath: string = 'assets/img/dropDown/arrow_drop_down.png'
+  isHover: boolean = false;
+  isClosed: boolean = true;
+  isSelected: boolean = true;
+  whichChoice: number = 0;
 
-   selectSurvey(type: string) {
-    this.surveySelected.emit(type); // Event nach oben schicken
+  /**
+   * Emits the selected survey category to the parent component.
+   * @param type The selected survey category.
+   */
+   selectSurvey(type: string): void {
+    this.surveySelected.emit(type);
   }
 
 
-  openDropDown() {
+  /**
+   * Opens the dropdown menu or closes it when it is already open.
+   */
+  openDropDown(): void {
     if (this.isClosed == false) return this.closeDropDown()
     this.iconPath = 'assets/img/dropDown/arrow_drop_down_open.png'
     this.isHover = true;
     this.isClosed = false;
   }
 
-  closeDropDown() {
+  /**
+   * Closes the dropdown menu and restores the correct icon state.
+   */
+  closeDropDown(): void {
     this.isHover = false;
     this.isClosed = true;
 
@@ -44,7 +54,11 @@ export class DropdownMenu {
     }
   }
 
-  showChoice(i: number) {
+  /**
+   * Stores the selected category index and emits the selected category.
+   * @param i The selected category index.
+   */
+  showChoice(i: number): void {
     this.whichChoice = i
     this.isSelected = false;
     this.closeDropDown();
@@ -52,5 +66,3 @@ export class DropdownMenu {
   }
 
 }
-
-

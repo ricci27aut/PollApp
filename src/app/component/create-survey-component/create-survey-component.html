@@ -4,8 +4,8 @@
         <img [src]="publishedIconPath">
         <header>
             <h1>Create new survey</h1>
-            <button class="form-btn-brown X-mobile" type="button" routerLink=""><span class="dnone-mobile">Cancel</span><img
-                    src="assets/img/CeateSurvey/X.png"></button>
+            <button class="form-btn-brown X-mobile" type="button" routerLink=""><span
+                    class="dnone-mobile">Cancel</span><img src="assets/img/CeateSurvey/X.png"></button>
         </header>
 
         <form [formGroup]="surveyForm" class="formGroup">
@@ -19,11 +19,13 @@
 
                     <label class="padding-top-10px padding-bottom-5px" for="end_at">Set end date (optional)</label>
                     <div class="input-group category-container">
-                        <div class="date-contaoner"> <input style="width: 60%;" id="end_at" type="text" formControlName="end_at">
+                        <div class="date-contaoner"> <input style="width: 60%;" id="end_at" type="date"
+                                formControlName="end_at">
                             <img (click)="cleanInput('end_at')" class="delete-icon"
                                 src="assets/img/CeateSurvey/delete.png">
                         </div>
-                        <app-dropdown-menu headline="Choose category" (surveySelected)="handleSurveyChange($event)"></app-dropdown-menu>
+                        <app-dropdown-menu headline="Choose category"
+                            (surveySelected)="handleSurveyChange($event)"></app-dropdown-menu>
                     </div>
                 </div>
                 <div class="description_Section">
@@ -81,6 +83,11 @@
             </form>
         </form>
         <div class="btn-Supmit">
+            <div class="userMessage" [class.dnone]="!showUserFeedack">
+                <i>Your survey is now published</i>
+                <img (click)="clearForm()" src="assets/img/CeateSurvey/X.png">
+            </div>
+            <i class="missing-category" [class.dnone]="!noCategory">Please choose a category</i>
             <button (click)="checkFormValue()" type="submit" class="publishBtn" type="submit"
                 [disabled]="!questionsForm.valid">Publish
                 <img src="assets/img/CeateSurvey/check-btn.png">
@@ -88,9 +95,5 @@
         </div>
     </section>
     <article class="userFeedBack" [class.dnone]="!showUserFeedack">
-        <div class="userMessage">
-            <i>Your survey is now published</i>
-            <img (click)="clearForm()" src="assets/img/CeateSurvey/X.png">
-        </div>
     </article>
 </main>

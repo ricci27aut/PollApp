@@ -4,7 +4,8 @@
     width: 100%;
     min-height: 80vh;
     height: fit-content;
-    padding: 40px;
+    padding: 20px 40px 20px 40px;
+    margin-bottom: 40px;
     background-color: #F3EFF5;
     border-top-right-radius: 120px;
     color: black;
@@ -140,6 +141,23 @@
     flex: 1;
 }
 
+.btn-back-to-home{
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button{
+        display: none !important;
+        padding: 5px;
+        background-color: #FFCFA1;
+        border-radius: 8px;
+        img{
+            width: 11px;
+        }
+    }
+}
+
 
 @media (max-width: 1000px) {
     .formParticipation {
@@ -158,4 +176,19 @@
         flex-direction: column;
         gap: 10px;
     }
+}
+
+
+@media(max-width: 450px){
+    .survey-meta__info{
+        flex-direction: column;
+        align-items:flex-start !important;
+        gap: 5px
+    }
+
+    .btn-back-to-home{button{
+        display: block !important;
+       
+    }
+}
 }

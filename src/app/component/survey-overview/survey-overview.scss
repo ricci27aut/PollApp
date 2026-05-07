@@ -1,6 +1,7 @@
 @use '../../../styles.scss' as *;
 
 article {
+    position: relative;
     width: 93%;
     height: 127px;
     color: white;
@@ -25,14 +26,14 @@ article {
     }
 
     p {
-        position: relative;
-        left: 80%;
+        position: absolute;
+        bottom: 10px;
+        right: 30px;
         font-size: 12px;
         font-weight: 500;
         color: black;
-
+        width: max-content;
         background-color: $primary-color;
-        width: fit-content;
         border-top-right-radius: 16px;
         padding: 2px 8px 2px 2px;
     }

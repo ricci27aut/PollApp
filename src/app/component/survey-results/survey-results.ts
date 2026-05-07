@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SurveyResults implements OnInit {
   constructor(private route: ActivatedRoute) { }
-  letters = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.'];
+  letters: string[] = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.'];
   showResults: boolean = false;
 
   surveyService = inject(SurveyService)
@@ -19,35 +19,67 @@ export class SurveyResults implements OnInit {
   questions = signal<any[]>([]);
   totalVotes = signal<number>(0);
 
+  isResultsOpen: boolean = false;
+
+
+  /**
+   * Loads the current survey vote count and shows results when votes exist.
+   */
   async ngOnInit(): Promise<void> {
     let id = await this.getTotalVotes()
-    if(this.totalVotes() === 0){
+    if (this.totalVotes() === 0) {
       return
-    }else{
+    } else {
       this.loadSurveyResults(id);
     }
-    
+
   }
 
-  async loadSurveyResults(id: number) {
+  /**
+   * Loads all questions for the selected survey and enables the results view.
+   * @param id The id of the selected survey.
+   */
+  async loadSurveyResults(id: number): Promise<void> {
     await this.surveyService.getSurveyQuestions(id);
     this.questions.set(this.surveyService.surveyQuestions());
 
     this.showResults = true;
   }
 
-  getPercentage(votes:number){
+  /**
+   * Calculates the percentage for one answer based on all survey votes.
+   * @param votes The vote count of one answer.
+   * @returns The rounded answer percentage.
+   */
+  getPercentage(votes: number): number {
     return Math.round((votes / this.totalVotes()) * 100);
   }
 
- async getTotalVotes() {
-  const id = Number(this.route.snapshot.paramMap.get('id'));
-  let survey = this.surveyService.surveys().find(survey => survey.id == id);
-  if (!survey) {
-    await this.surveyService.getSurvey();
-    survey = this.surveyService.surveys().find(survey => survey.id == id);
+  /**
+   * Gets the current survey id from the route and stores its total vote count.
+   * @returns The selected survey id.
+   */
+  async getTotalVotes(): Promise<number> {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    let survey = this.surveyService.surveys().find(survey => survey.id == id);
+    if (!survey) {
+      await this.surveyService.getSurvey();
+      survey = this.surveyService.surveys().find(survey => survey.id == id);
+    }
+    if (!survey) return id;
+    this.totalVotes.set(survey.votings);
+    return id;
   }
-  this.totalVotes.set(survey.votings);
-  return id;
-}
+
+  /**
+   * Toggles the mobile results area between open and closed.
+   */
+  toggleResultsMobile(): void {
+    if (this.isResultsOpen == false) {
+      this.isResultsOpen = true;
+    } else {
+      this.isResultsOpen = false;
+    }
+
+  }
 }

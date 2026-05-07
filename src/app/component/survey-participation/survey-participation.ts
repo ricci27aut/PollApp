@@ -2,11 +2,11 @@ import { Component, OnInit, inject, signal, Output, EventEmitter } from '@angula
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SurveyService } from '../../shared/services/survey-service'
-
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-survey-participation',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './survey-participation.html',
   styleUrl: './survey-participation.scss',
 })
@@ -21,29 +21,39 @@ export class SurveyParticipation implements OnInit {
   surveyQuestons = signal<any[]>([])
   selectedAnswers: { [questionId: number]: number[] } = {};
 
-  letters = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.'];
+  letters: string[] = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.'];
+  notAllAnswersSelected: boolean = false;
 
-  notAllAnswersSelected = false;
 
-
+  /**
+   * Loads the selected survey and its questions from the current route id.
+   */
   async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
 
     if (!this.serviceData.surveys().length) {
       await this.serviceData.getSurvey();
     }
-    let d = this.serviceData.surveys().filter(survey => survey.id == id)
+    let d = this.serviceData.surveys().filter(survey => survey.id == Number(id))
     this.surveyInfo.set(d)
     this.loadQuestons(id);
+    this.isSurveyEnded();
   }
 
-  async loadQuestons(id: string | null) {
+  /**
+   * Loads all questions for the selected survey.
+   * @param id The selected survey id from the route.
+   */
+  async loadQuestons(id: string | null): Promise<void> {
     let idNum: number = Number(id);
     await this.serviceData.getSurveyQuestions(idNum);
     this.surveyQuestons.set(this.serviceData.surveyQuestions());
   }
 
-  async submitVoting() {
+  /**
+   * Submits the selected answers when every question has been answered.
+   */
+  async submitVoting(): Promise<void> {
     if (!this.allQuestionsAnswered()) {
     this.notAllAnswersSelected = true;
     return;
@@ -53,7 +63,12 @@ export class SurveyParticipation implements OnInit {
     this.router.navigate(['/']);
   }
 
-  toggleAnswer(question: any, answerIndex: number) {
+  /**
+   * Selects or toggles an answer depending on the question answer mode.
+   * @param question The question the answer belongs to.
+   * @param answerIndex The index of the clicked answer.
+   */
+  toggleAnswer(question: any, answerIndex: number): void {
     const questionId = question.id;
     const selected = this.selectedAnswers[questionId] ?? [];
 
@@ -68,7 +83,10 @@ export class SurveyParticipation implements OnInit {
     }
   }
 
-  async publsichQuestonVotings() {
+  /**
+   * Updates the vote counts for all selected answers.
+   */
+  async publsichQuestonVotings(): Promise<void> {
     for (const question of this.surveyQuestons()) {
       const selected = this.selectedAnswers[question.id] ?? [];
       if (!selected.length) continue;
@@ -82,14 +100,35 @@ export class SurveyParticipation implements OnInit {
     }
   }
 
-  isAnswerSelected(question: any, answerIndex: number) {
+  /**
+   * Checks whether an answer is selected for the given question.
+   * @param question The question to check.
+   * @param answerIndex The answer index to check.
+   * @returns True when the answer is selected.
+   */
+  isAnswerSelected(question: any, answerIndex: number): boolean {
     return this.selectedAnswers[question.id]?.includes(answerIndex) ?? false;
   }
 
-  allQuestionsAnswered() {
+  /**
+   * Checks whether every survey question has at least one selected answer.
+   * @returns True when all questions are answered.
+   */
+  allQuestionsAnswered(): boolean {
   return this.surveyQuestons().every(question => {
     const selected = this.selectedAnswers[question.id] ?? [];
     return selected.length > 0;
   });
+}
+
+/**
+ * Checks whether the selected survey end date is already in the past.
+ * @returns True when the survey has ended.
+ */
+isSurveyEnded(): boolean {
+  const survey = this.surveyInfo()[0];
+  if (!survey?.ends_at) return false;
+
+  return new Date(survey.ends_at).getTime() < Date.now();
 }
 }

@@ -16,11 +16,19 @@ export class SurveyOverview {
   selectedArray: string = 'survey'
   @Input() showPastSurveys: boolean = false;
 
- get displayedSurveys() {
+ /**
+  * Returns the currently selected category surveys from the survey service.
+  */
+ get displayedSurveys(): any[] {
   return this.surveyService.categorySurveys();
 }
 
-  showLeftDays(endDate: number) {
+  /**
+   * Creates a readable status text for the survey end date.
+   * @param endDate The survey end date.
+   * @returns A text that describes when the survey ends.
+   */
+  showLeftDays(endDate: number): string {
     const today = new Date();
     const end = new Date(endDate);
 
@@ -36,7 +44,12 @@ export class SurveyOverview {
     }
   }
 
-  showSurveyVoting(title: string, id: number) {
+  /**
+   * Navigates to the voting page for the selected survey.
+   * @param title The selected survey title.
+   * @param id The selected survey id.
+   */
+  showSurveyVoting(title: string, id: number): void {
     this.router.navigate([id, title, 'voting']);
   }
 }

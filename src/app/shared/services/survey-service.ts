@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { createClient, RealtimeChannel } from '@supabase/supabase-js';
+import { Survey, SurveyQuestions }  from '../moduls/sureve-modul-module'
 
 @Injectable({
   providedIn: 'root',
@@ -9,21 +10,24 @@ export class SurveyService {
   supabaseKey = 'sb_publishable_JchZljAg8ekEHsnptMhN3Q_r8w5w9zm';
   sbSurvey = createClient(this.supabaseUrl, this.supabaseKey);
 
-  surveys = signal<any[]>([]);
-  endingSurveys = signal<any[]>([]);
-  categorySurveys = signal<any[]>([])
-  pastSurveys = signal<any[]>([]);
-  surveyQuestions = signal<any[]>([]);
+  surveys = signal<Survey[]>([]);
+  endingSurveys = signal<Survey[]>([]);
+  categorySurveys = signal<Survey[]>([])
+  pastSurveys = signal<Survey[]>([]);
+  surveyQuestions = signal<SurveyQuestions[]>([]);
   channels: RealtimeChannel | undefined;
 
-  serverEventListener() {
+  /**
+   * Subscribes to new survey inserts and refreshes the local survey lists.
+   */
+  serverEventListener(): void {
     if (this.channels) return;
     this.channels = this.sbSurvey.channel('custom-all-channel')
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'survey_list' },
         (payload) => {
-          this.surveys.update(surveys => [...surveys, payload.new]);
+          this.surveys.update(surveys => [...surveys, payload.new as Survey]);
           this.updateSurveyLists();
         }
       )
@@ -31,11 +35,17 @@ export class SurveyService {
       });
   }
 
-  ngOnDestroy() {
+  /**
+   * Removes the active realtime channel when the service is destroyed.
+   */
+  ngOnDestroy(): void {
     if (this.channels) this.sbSurvey.removeChannel(this.channels);
   }
 
-  async getSurvey() {
+  /**
+   * Loads all surveys from Supabase and updates the derived survey lists.
+   */
+  async getSurvey(): Promise<void> {
     let { data: survey, error } = await this.sbSurvey
       .from('survey_list')
       .select('id, title, description, ends_at, category, votings');
@@ -46,12 +56,19 @@ export class SurveyService {
     this.serverEventListener()
   }
 
-  updateSurveyLists() {
+  /**
+   * Updates the ending, past, and category survey lists.
+   */
+  updateSurveyLists(): void {
     this.getEndingSurveys();
     this.getCategorySurveys('Team Activities', false);
   }
 
-  async getSurveyQuestions(surveyId: number) {
+  /**
+   * Loads all questions for a survey from Supabase.
+   * @param surveyId The selected survey id.
+   */
+  async getSurveyQuestions(surveyId: number): Promise<void> {
     const { data, error } = await this.sbSurvey
       .from('questions')
       .select('*')
@@ -59,7 +76,12 @@ export class SurveyService {
     this.surveyQuestions.set(data ?? []);
   }
 
-  async addSurvey(survey: { title: string, description: string, ends_at?: string | null, category: string, votings: number }) {
+  /**
+   * Adds a new survey to Supabase.
+   * @param survey The survey data to insert.
+   * @returns The created survey entry.
+   */
+  async addSurvey(survey: { title: string, description: string, ends_at?: string | null, category: string, votings: number }): Promise<Survey | null> {
     const { data, error } = await this.sbSurvey
       .from('survey_list')
       .insert([survey])
@@ -68,42 +90,70 @@ export class SurveyService {
     return data;
   }
 
+  /**
+   * Adds all questions for a survey to Supabase.
+   * @param questionsData The question data to insert.
+   */
   async addSurveyQuestons(questionsData: {
     survey_id: number,
     question: string,
     answers: string[]
     allowMultiple: boolean,
     answer_votes: number[];
-  }[]) {
+  }[]): Promise<void> {
     const { data, error } = await this.sbSurvey
       .from('questions')
       .insert(questionsData)
       .select()
   }
 
-  getEndingSurveys() {
+  /**
+   * Updates the active ending-soon surveys and expired surveys.
+   */
+  getEndingSurveys(): void {
     const now = new Date().getTime();
+    const activeSurveys = this.getActiveSurveys(now)
+    const expiredSurveys = this.expiredSurveys(now)
 
-    const activeSurveys = this.surveys()
+    this.endingSurveys.set(activeSurveys);
+    this.pastSurveys.set(expiredSurveys);
+  }
+
+  /**
+   * Gets active surveys ordered by the nearest end date.
+   * @param now The current timestamp.
+   * @returns The next active surveys.
+   */
+  getActiveSurveys(now: number): Survey[] {
+    return this.surveys()
       .filter(survey => survey.ends_at)
       .filter(survey => new Date(survey.ends_at).getTime() >= now)
       .sort((a, b) =>
         new Date(a.ends_at).getTime() - new Date(b.ends_at).getTime()
       )
       .slice(0, 3);
+  }
 
-    const expiredSurveys = this.surveys()
+  /**
+   * Gets expired surveys ordered by the most recent end date.
+   * @param now The current timestamp.
+   * @returns All expired surveys.
+   */
+  expiredSurveys(now: number): Survey[] {
+    return this.surveys()
       .filter(survey => survey.ends_at)
       .filter(survey => new Date(survey.ends_at).getTime() < now)
       .sort((a, b) =>
         new Date(b.ends_at).getTime() - new Date(a.ends_at).getTime()
       );
-
-    this.endingSurveys.set(activeSurveys);
-    this.pastSurveys.set(expiredSurveys);
   }
 
-  getCategorySurveys(category: string, showPastSurveys: boolean) {
+  /**
+   * Filters surveys by category and active or past state.
+   * @param category The selected survey category.
+   * @param showPastSurveys Whether past surveys should be shown.
+   */
+  getCategorySurveys(category: string, showPastSurveys: boolean): void {
     const now = Date.now();
 
     const filteredSurveys = this.surveys()
@@ -116,6 +166,12 @@ export class SurveyService {
     this.categorySurveys.set(filteredSurveys);
   }
 
+  /**
+   * Updates the vote counts for one question.
+   * @param questionId The question id to update.
+   * @param answerVotes The updated answer vote counts.
+   * @returns The updated question data.
+   */
   async updateQuestionVotes(questionId: number, answerVotes: number[]) {
     const { data, error } = await this.sbSurvey
       .from('questions')
@@ -126,8 +182,13 @@ export class SurveyService {
     return data;
   }
 
+  /**
+   * Increments the total voting count for a survey.
+   * @param surveyId The selected survey id.
+   */
   async incrementSurveyVotings(surveyId: number) {
     const survey = this.surveys().find(s => s.id === surveyId);
+    if (!survey) return;
     const { data, error } = await this.sbSurvey
       .from('survey_list')
       .update({ votings: survey.votings + 1 })

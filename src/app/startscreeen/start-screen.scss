@@ -6,7 +6,7 @@ main {
     min-height: 100vh;
     min-width: 100%;
     color: white;
-    padding: 0 clamp(20px, 5vw, 120px) 0 clamp(20px, 5vw, 120px);
+    padding: 0 clamp(5px, 5vw, 120px) 0 clamp(5px, 5vw, 120px);
 }
 
 header {
@@ -168,7 +168,7 @@ header {
     max-height: fit-content;
 
     .phone-image {
-        width: clamp(343px, 5vw, 400px);
+        width: clamp(300px, 5vw, 400px);
         position: relative;
         z-index: 2;
     }
@@ -276,3 +276,12 @@ header {
         @include flex-center
     }
 }
+
+@media (max-width: 370px) {
+   main{
+    padding-left: 5px;
+    padding-right: 5px;
+   }
+   
+}
+

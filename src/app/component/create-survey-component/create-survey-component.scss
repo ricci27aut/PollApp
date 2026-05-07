@@ -162,6 +162,7 @@ header {
 }
 
 .btn-Supmit {
+    position: relative;
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -217,6 +218,12 @@ header {
 
 .padding-bottom-5px {
     padding-bottom: 5px;
+}
+
+.missing-category {
+    padding-right: 10px;
+    padding-bottom: 10px;
+    color: red;
 }
 
 .possition-checkboxs {
@@ -277,33 +284,34 @@ input.invalid {
 }
 
 .userFeedBack {
+    position: fixed;
+    inset: 0;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     background-color: rgba(0, 0, 0, 0.141);
+    z-index: 90;
+}
+
+.userMessage {
+    width: 230px;
+    color: black;
+    background-color: $secondary-color;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+    border-radius: 8px;
+    border-top-right-radius: 40px;
+
     position: absolute;
-    left: 0;
-    top: 0;
+    right: 0;
+    bottom: 0px;
+    z-index: 100;
 
-    .userMessage {
-        width: 230px;
-        color: black;
-        background-color: $secondary-color;
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 50px;
-        border-radius: 8px;
-        border-top-right-radius: 40px;
-
-        position: absolute;
-        left: 55%;
-        top: 80vh;
-
-        img {
-            padding-bottom: 15px;
-            cursor: pointer;
-        }
+    img {
+        padding-bottom: 15px;
+        cursor: pointer;
     }
 }
 
@@ -353,7 +361,17 @@ input.invalid {
 
     .btn-Supmit {
         justify-content: center;
+        flex-direction: column;
+        .publishBtn {
+            background-color: $primary-color;
+            img {
+                width: 15px;
+                transform: translateX(0);
+            }
+        }
+
     }
+
 }
 
 @media (max-width: 770px) {
