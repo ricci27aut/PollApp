@@ -201,10 +201,10 @@ header {
 .delete-icon {
     width: 26px;
     cursor: pointer;
-    content: url('/assets/img/CeateSurvey/delete.png');
+    content: url('/PollApp/assets/img/CeateSurvey/delete.png');
 
     &:hover {
-        content: url('/assets/img/CeateSurvey/delete.hover.png');
+        content: url('/PollApp/assets/img/CeateSurvey/delete.hover.png');
     }
 }
 
@@ -245,7 +245,7 @@ header {
             cursor: pointer;
 
             &:hover:not(.no-hover) {
-                content: url('/assets/img/CeateSurvey/checkboxs_hover.png');
+                content: url('/PollApp/assets/img/CeateSurvey/checkboxs_hover.png');
             }
         }
 
