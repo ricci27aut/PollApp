@@ -192,7 +192,7 @@ export class SurveyService {
     if (!survey) return;
     const { data, error } = await this.sbSurvey
       .from('survey_list')
-      .update({ votings: this.totalVotes() })
+      .update({ votings: survey.votings + 1 })
       .eq('id', surveyId)
       .select();
   }

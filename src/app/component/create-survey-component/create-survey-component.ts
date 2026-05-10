@@ -56,22 +56,22 @@ export class CreateSurveyComponent {
   }
 
   /**
-   * Returns the questions form array.
+   * Returns the form array that contains all questions.
    */
   get questions(): FormArray {
     return this.questionsForm.get('questions') as FormArray;
   }
 
   /**
-   * Returns the answers form array for a question.
-   * @param i The question index.
+   * Returns the answers form array for the selected question.
+   * @param i The index of the question.
    */
   answers(i: number): FormArray {
     return this.questions.at(i).get('answers') as FormArray;
   }
 
   /**
-   * Adds a new question when the maximum question count is not reached.
+   * Adds a new question if the maximum number of questions has not been reached.
    */
   addQuestion(): void {
     if (this.questions.length >= 4) return;
@@ -79,16 +79,16 @@ export class CreateSurveyComponent {
   }
 
   /**
-   * Returns the answer vote form array for a question.
-   * @param i The question index.
+   * Returns the answer votes form array for the selected question.
+   * @param i The index of the question.
    */
   answer_votes(i: number): FormArray {
     return this.questions.at(i).get('answer_votes') as FormArray;
   }
 
   /**
-   * Deletes a question or resets the first question when it cannot be removed.
-   * @param i The question index.
+   * Deletes a question or resets the first question if it cannot be removed.
+   * @param i The index of the question.
    */
   deleteQuestion(i: number): void {
     if (i === 0) {
@@ -103,8 +103,8 @@ export class CreateSurveyComponent {
   }
 
   /**
-   * Adds an answer to a question when the maximum answer count is not reached.
-   * @param i The question index.
+   * Adds an answer to a question if the maximum number of answers has not been reached.
+   * @param i The index of the question.
    */
   addAnswer(i: number): void {
     if (this.answers(i).length >= 6) return;
@@ -114,8 +114,8 @@ export class CreateSurveyComponent {
 
   /**
    * Deletes an answer or clears one of the required default answers.
-   * @param i The question index.
-   * @param y The answer index.
+   * @param i The index of the question.
+   * @param y The index of the answer.
    */
   deleteAnswer(i: number, y: number): void {
     if (y <= 1) {
@@ -127,7 +127,7 @@ export class CreateSurveyComponent {
   }
 
   /**
-   * Clears a survey detail form input.
+   * Clears one input field in the survey details form.
    * @param input The form control name to clear.
    */
   cleanInput(input: string): void {
@@ -135,7 +135,7 @@ export class CreateSurveyComponent {
   }
 
   /**
-   * Validates the form and publishes the survey when all required values exist.
+   * Validates the form and publishes the survey if all required values are present.
    */
   checkFormValue(): void {
     this.surveyForm.markAllAsTouched();
@@ -163,7 +163,7 @@ export class CreateSurveyComponent {
   }
 
   /**
-   * Creates the survey entry and publishes its questions.
+   * Creates the survey entry and saves its questions.
    */
   async publishSurvey(): Promise<void> {
     let formData: Omit<Survey, 'id'> = {
@@ -183,7 +183,7 @@ export class CreateSurveyComponent {
 
   /**
    * Builds and saves all question data for a survey.
-   * @param id The created survey id.
+   * @param id The ID of the created survey.
    */
   publshQuestions(id: number): void {
     const questionsData = this.questionsForm.controls.questions.value.map((question: any) => {
@@ -201,7 +201,7 @@ export class CreateSurveyComponent {
 
   /**
    * Toggles whether a question allows multiple answers.
-   * @param i The question index.
+   * @param i The index of the question.
    */
   AlowMultiAnswers(i: number): void {
     const control = this.questions.at(i).get('allowMultiple');
@@ -209,7 +209,7 @@ export class CreateSurveyComponent {
   }
 
   /**
-   * Shows the user feedback message after publishing.
+   * Shows a feedback message after the survey has been published.
    */
   userFeedBack(): void {
     this.publishedIconPath = 'assets/img/CeateSurvey/published.png'
@@ -219,21 +219,20 @@ export class CreateSurveyComponent {
     }, 1000);
   }
 
-    /**
-     * Navigates back to the start page.
-     */
-    clearForm(): void {
-      this.router.navigate(['/']);
-    }
-
-    /**
-     * Creates a default end date thirty days from today.
-     * @returns The default end date as an ISO string.
-     */
-    getDefaultEndDate(): string {
-      const endDate = new Date();
-      endDate.setDate(endDate.getDate() + 30);
-      return endDate.toISOString();
-    }
+  /**
+   * Navigates back to the start page.
+   */
+  clearForm(): void {
+    this.router.navigate(['/']);
   }
 
+  /**
+   * Creates a default end date thirty days from today.
+   * @returns The default end date as an ISO string.
+   */
+  getDefaultEndDate(): string {
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 30);
+    return endDate.toISOString();
+  }
+  }
