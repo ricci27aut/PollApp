@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { DropdownMenu } from '../dropdown-menu/dropdown-menu'
 import { SurveyService } from '../../shared/services/survey-service'
 import { Router } from '@angular/router';
-import { Survey }  from '../../shared/moduls/sureve-modul-module'
+import { Survey } from '../../shared/moduls/sureve-modul-module'
 
 @Component({
   selector: 'app-create-survey-component',
@@ -20,8 +20,10 @@ export class CreateSurveyComponent {
 
   letters: string[] = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.'];
   publishedIconPath: string = 'assets/img/CeateSurvey/draft.png';
+  today: string = new Date().toISOString().split('T')[0];
   showUserFeedack: boolean = false
   noCategory: boolean = false
+  userFeddBack: boolean = false
 
   surveyForm = this.fb.group({
     title: ['', Validators.required],
@@ -136,13 +138,19 @@ export class CreateSurveyComponent {
    * Validates the form and publishes the survey when all required values exist.
    */
   checkFormValue(): void {
-    if (this.surveyForm.invalid || this.questionsForm.invalid) { return };
-    if(this.surveyForm.get('category')?.value === ""){
-      this.noCategory = true;
-      return
+    this.surveyForm.markAllAsTouched();
+    this.questionsForm.markAllAsTouched();
+
+    if (this.surveyForm.invalid || this.questionsForm.invalid || this.surveyForm.get('category')?.value === '') {
+      this.userFeddBack = true;
+      if (this.surveyForm.get('category')?.value === '') {
+        this.noCategory = true;
+      }
+      return;
     }
-    this.noCategory= false;
-    this.publishSurvey()
+    this.noCategory = false;
+    this.userFeddBack = false;
+    this.publishSurvey();
     this.userFeedBack();
   }
 
@@ -206,23 +214,26 @@ export class CreateSurveyComponent {
   userFeedBack(): void {
     this.publishedIconPath = 'assets/img/CeateSurvey/published.png'
     this.showUserFeedack = true;
+    setTimeout(() => {
+      this.clearForm();
+    }, 1000);
   }
 
-  /**
-   * Navigates back to the start page.
-   */
-  clearForm(): void {
-    this.router.navigate(['/']);;
-  }
+    /**
+     * Navigates back to the start page.
+     */
+    clearForm(): void {
+      this.router.navigate(['/']);
+    }
 
-  /**
-   * Creates a default end date thirty days from today.
-   * @returns The default end date as an ISO string.
-   */
-  getDefaultEndDate(): string {
-    const endDate = new Date();
-    endDate.setDate(endDate.getDate() + 30);
-    return endDate.toISOString();
+    /**
+     * Creates a default end date thirty days from today.
+     * @returns The default end date as an ISO string.
+     */
+    getDefaultEndDate(): string {
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + 30);
+      return endDate.toISOString();
+    }
   }
-}
 

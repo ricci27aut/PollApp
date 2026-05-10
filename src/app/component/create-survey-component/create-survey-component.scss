@@ -7,6 +7,7 @@ main {
     color: white;
     min-height: 100vh;
     font-family: 'Mulish';
+    width: 100%;
 
     input {
         border-radius: 4px;
@@ -324,6 +325,10 @@ input.invalid {
     top: 30px;
     left: 5%;
     display: none;
+}
+
+.border-red{
+border: 1px solid red;
 }
 
 @media (max-width: 900px) {

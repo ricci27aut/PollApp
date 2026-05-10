@@ -5,7 +5,7 @@ article {
     margin: 30px 0px 30px 0px;
     color: black;
     background-color: white;
-    width: 321px;
+    width: clamp(300px, 7vw, 321px);
     height: 310px;
     border-top-right-radius: 80px;
     display: flex;

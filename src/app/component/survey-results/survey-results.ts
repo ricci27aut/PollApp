@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { SurveyService } from '../../shared/services/survey-service'
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -16,8 +16,11 @@ export class SurveyResults implements OnInit {
 
   surveyService = inject(SurveyService)
 
-  questions = signal<any[]>([]);
-  totalVotes = signal<number>(0);
+  questions = this.surveyService.surveyQuestions;
+  totalVotes = this.surveyService.totalVotes;
+  showResultsEffect = effect(() => {
+    this.showResults = this.totalVotes() > 0;
+  });
 
   isResultsOpen: boolean = false;
 
@@ -27,12 +30,13 @@ export class SurveyResults implements OnInit {
    */
   async ngOnInit(): Promise<void> {
     let id = await this.getTotalVotes()
+    await this.loadSurveyResults(id)
+
     if (this.totalVotes() === 0) {
       return
     } else {
-      this.loadSurveyResults(id);
+      this.showResults = true;
     }
-
   }
 
   /**
@@ -41,9 +45,6 @@ export class SurveyResults implements OnInit {
    */
   async loadSurveyResults(id: number): Promise<void> {
     await this.surveyService.getSurveyQuestions(id);
-    this.questions.set(this.surveyService.surveyQuestions());
-
-    this.showResults = true;
   }
 
   /**
@@ -52,6 +53,7 @@ export class SurveyResults implements OnInit {
    * @returns The rounded answer percentage.
    */
   getPercentage(votes: number): number {
+    if (this.totalVotes() === 0) return 0;
     return Math.round((votes / this.totalVotes()) * 100);
   }
 

@@ -15,6 +15,7 @@ export class SurveyService {
   categorySurveys = signal<Survey[]>([])
   pastSurveys = signal<Survey[]>([]);
   surveyQuestions = signal<SurveyQuestions[]>([]);
+  totalVotes = signal<number>(0);
   channels: RealtimeChannel | undefined;
 
   /**
@@ -191,8 +192,36 @@ export class SurveyService {
     if (!survey) return;
     const { data, error } = await this.sbSurvey
       .from('survey_list')
-      .update({ votings: survey.votings + 1 })
+      .update({ votings: this.totalVotes() })
       .eq('id', surveyId)
       .select();
+  }
+
+ /**
+ * Updates the local vote count for one answer in the survey questions signal.
+ * @param question The question whose answer votes should be updated.
+ * @param answerIndex The index of the answer to update.
+ * @param change The vote change amount. Use 1 to add a vote and -1 to remove one.
+ */
+updateLocalVote(question: any, answerIndex: number, change: number): void {
+  this.surveyQuestions.update(questions =>
+    questions.map(currentQuestion => {
+      if (currentQuestion.id !== question.id) return currentQuestion;
+
+      const updatedVotes = [...currentQuestion.answer_votes];
+      updatedVotes[answerIndex] = (updatedVotes[answerIndex] ?? 0) + change;
+
+      return {
+        ...currentQuestion,
+        answer_votes: updatedVotes
+      };
+    })
+  );
+}
+/**
+ * Updates the local vote count
+ */
+  updateLocalTotalVotes(change: number): void {
+    this.totalVotes.update(votes => Math.max(0, votes + change));
   }
 }

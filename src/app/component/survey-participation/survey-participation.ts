@@ -18,7 +18,7 @@ export class SurveyParticipation implements OnInit {
   @Output() votingSubmitted = new EventEmitter<void>();
 
   surveyInfo = signal<any[]>([])
-  surveyQuestons = signal<any[]>([])
+  surveyQuestons = this.serviceData.surveyQuestions;
   selectedAnswers: { [questionId: number]: number[] } = {};
 
   letters: string[] = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.'];
@@ -55,9 +55,9 @@ export class SurveyParticipation implements OnInit {
    */
   async submitVoting(): Promise<void> {
     if (!this.allQuestionsAnswered()) {
-    this.notAllAnswersSelected = true;
-    return;
-  }
+      this.notAllAnswersSelected = true;
+      return;
+    }
     await this.publsichQuestonVotings();
     await this.serviceData.incrementSurveyVotings(this.surveyInfo()[0].id);
     this.router.navigate(['/']);
@@ -71,15 +71,50 @@ export class SurveyParticipation implements OnInit {
   toggleAnswer(question: any, answerIndex: number): void {
     const questionId = question.id;
     const selected = this.selectedAnswers[questionId] ?? [];
+    const hadSelectedAnswer = this.hasSelectedAnswer();
 
     if (question.allowMultiple) {
       if (selected.includes(answerIndex)) {
         this.selectedAnswers[questionId] = selected.filter(index => index !== answerIndex);
+        this.answerClicked(question, answerIndex, -1)
       } else {
         this.selectedAnswers[questionId] = [...selected, answerIndex];
+        this.answerClicked(question, answerIndex, 1)
       }
     } else {
+      const oldAnswerIndex = selected[0];
+      if (oldAnswerIndex === answerIndex) return;
+      if (oldAnswerIndex !== undefined) {
+        this.answerClicked(question, oldAnswerIndex, -1)
+      }
       this.selectedAnswers[questionId] = [answerIndex];
+      this.answerClicked(question, answerIndex, 1)
+    }
+
+    this.updateLocalTotalVotes(hadSelectedAnswer);
+  }
+
+  /**
+   * Updates the local vote count for a selected answer.
+   * @param question The question that contains the selected answer.
+   * @param answerIndex The index of the selected answer.
+   * @param change The vote change amount. Use 1 to add a vote and -1 to remove one.
+   */
+  answerClicked(question: any, answerIndex: number, change: number) {
+    this.serviceData.updateLocalVote(question, answerIndex, change);
+  }
+
+  /**
+    * update the vote counter for the first vote
+    * @param question The question that contains the selected answer.
+    */
+  updateLocalTotalVotes(hadSelectedAnswer: boolean): void {
+    const hasSelectedAnswer = this.hasSelectedAnswer();
+    if (!hadSelectedAnswer && hasSelectedAnswer) {
+      this.serviceData.updateLocalTotalVotes(1);
+    }
+    if (hadSelectedAnswer && !hasSelectedAnswer) {
+      this.serviceData.updateLocalTotalVotes(-1);
     }
   }
 
@@ -90,12 +125,8 @@ export class SurveyParticipation implements OnInit {
     for (const question of this.surveyQuestons()) {
       const selected = this.selectedAnswers[question.id] ?? [];
       if (!selected.length) continue;
-      const updatedVotes = [...question.answer_votes];
-      selected.forEach(answerIndex => {
-        updatedVotes[answerIndex] = (updatedVotes[answerIndex] ?? 0) + 1;
-      });
 
-      await this.serviceData.updateQuestionVotes(question.id, updatedVotes);
+      await this.serviceData.updateQuestionVotes(question.id, question.answer_votes);
       this.router.navigate(['/']);
     }
   }
@@ -115,20 +146,28 @@ export class SurveyParticipation implements OnInit {
    * @returns True when all questions are answered.
    */
   allQuestionsAnswered(): boolean {
-  return this.surveyQuestons().every(question => {
-    const selected = this.selectedAnswers[question.id] ?? [];
-    return selected.length > 0;
-  });
-}
+    return this.surveyQuestons().every(question => {
+      const selected = this.selectedAnswers[question.id] ?? [];
+      return selected.length > 0;
+    });
+  }
 
-/**
- * Checks whether the selected survey end date is already in the past.
- * @returns True when the survey has ended.
+  /**
+ * Checks whether the user has selected at least one answer.
+ * @returns True when at least one answer is selected.
  */
-isSurveyEnded(): boolean {
-  const survey = this.surveyInfo()[0];
-  if (!survey?.ends_at) return false;
+  hasSelectedAnswer(): boolean {
+    return Object.values(this.selectedAnswers).some(selected => selected.length > 0);
+  }
 
-  return new Date(survey.ends_at).getTime() < Date.now();
-}
+  /**
+   * Checks whether the selected survey end date is already in the past.
+   * @returns True when the survey has ended.
+   */
+  isSurveyEnded(): boolean {
+    const survey = this.surveyInfo()[0];
+    if (!survey?.ends_at) return false;
+
+    return new Date(survey.ends_at).getTime() < Date.now();
+  }
 }

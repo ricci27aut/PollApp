@@ -20,12 +20,12 @@
                     <label class="padding-top-10px padding-bottom-5px" for="end_at">Set end date (optional)</label>
                     <div class="input-group category-container">
                         <div class="date-contaoner"> <input style="width: 60%;" id="end_at" type="date"
-                                formControlName="end_at">
+                                formControlName="end_at" [min]="today">
                             <img (click)="cleanInput('end_at')" class="delete-icon"
                                 src="assets/img/CeateSurvey/delete.png">
                         </div>
                         <app-dropdown-menu headline="Choose category"
-                            (surveySelected)="handleSurveyChange($event)"></app-dropdown-menu>
+                            (surveySelected)="handleSurveyChange($event)" [class.border-red]="noCategory" (click)="noCategory = false"></app-dropdown-menu>
                     </div>
                 </div>
                 <div class="description_Section">
@@ -87,9 +87,8 @@
                 <i>Your survey is now published</i>
                 <img (click)="clearForm()" src="assets/img/CeateSurvey/X.png">
             </div>
-            <i class="missing-category" [class.dnone]="!noCategory">Please choose a category</i>
-            <button (click)="checkFormValue()" type="submit" class="publishBtn" type="submit"
-                [disabled]="!questionsForm.valid">Publish
+            <i class="missing-category" [class.dnone]="!userFeddBack">Please fill out all marked fields</i>
+            <button (click)="checkFormValue()" type="submit" class="publishBtn" type="submit">Publish
                 <img src="assets/img/CeateSurvey/check-btn.png">
             </button>
         </div>

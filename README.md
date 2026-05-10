@@ -1,59 +1,36 @@
 # PollApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.6.
+PollApp is an Angular application for creating, publishing and participating in surveys. Users can create surveys with multiple questions and answer options, choose a category, set an optional end date and view live survey results.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- Create new surveys
+- Add multiple questions
+- Add multiple answer options
+- Allow single-choice or multiple-choice answers
+- Choose a survey category
+- Set an optional end date
+- Participate in active surveys
+- Show live result bars
+- Store survey data with Supabase
 
-```bash
-ng serve
-```
+## Technologies
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Angular
+- TypeScript
+- SCSS
+- Supabase
+- Angular Signals
 
-## Code scaffolding
+## Requirements
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Before running the project, make sure you have installed:
 
-```bash
-ng generate component component-name
-```
+- Node.js 20 or newer
+- npm 10 or newer
+- Angular CLI 21.2.6
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Install Angular CLI globally with:
 
 ```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+npm install -g @angular/cli
