@@ -12,14 +12,14 @@ $braun-btn-primary: #7B5B55;
 
 app-create-survey-component {
     width: 100%;
-  display: flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 app-survey-voting {
     width: 100%;
-  display: flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
 }
@@ -73,8 +73,8 @@ textarea {
 }
 
 @font-face {
-  font-family: 'NerkoOne';
-  src: url('../public/fonts/Nerko_One/NerkoOne-Regular.ttf') format('truetype');
-  font-style: normal;
-  font-display: swap;
+    font-family: 'NerkoOne';
+    src: url('../public/fonts/Nerko_One/NerkoOne-Regular.ttf') format('truetype');
+    font-style: normal;
+    font-display: swap;
 }

@@ -26,11 +26,33 @@ PollApp is an Angular application for creating, publishing and participating in 
 
 Before running the project, make sure you have installed:
 
-- Node.js 20 or newer
-- npm 10 or newer
-- Angular CLI 21.2.6
+- Node.js
+- npm
 
-Install Angular CLI globally with:
+## Getting Started
+
+Follow these steps to run the project locally.
+
+### 1. Clone the repository
 
 ```bash
-npm install -g @angular/cli
+git clone https://github.com/ricci27aut/PollApp
+```
+
+### 2. Open the project folder
+
+```bash
+cd PollApp
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Start the development server
+
+```bash
+ng serve --open
+```
